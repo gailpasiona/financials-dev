@@ -1,0 +1,147 @@
+"sub_acct_id","company_id","coa_id","account_title","account_desc"
+"1","2","1000","1000 · Cash in Bank",
+"1","2","1021","1000 · Cash in Bank:1021 · CBC C/A  203-479941-1",
+"1","2","1022","1000 · Cash in Bank:1022 · BPI Global C/A 1921-1152-84",
+"1","2","1023","1000 · Cash in Bank:1023 · Maybank C/A 245002246",
+"1","2","1024","1000 · Cash in Bank:1024 · EWB Salce C/A 48-02-01286-7",
+"1","2","1025","1000 · Cash in Bank:1025 · Sun Savings C/A",
+"1","2","1026","1000 · Cash in Bank:1026 · BPI Infinity C/A 4281-0003-87",
+"1","2","1027","1000 · Cash in Bank:1027 · CBC Savings C/A",
+"1","2","1028","1000 · Cash in Bank:1028 · EWB Beaufort C/A 203-02-00089-2",
+"1","2","1100","1100 · Petty Cash Fund",
+"2","2","1200","1200 · Accounts Receivable",
+"3","2","12000","12000 · Undeposited Funds","Funds received, but not yet deposited to a bank account"
+"3","2","1201","1201 · Accounts Receivable - Others",
+"3","2","1202","1202 · SSS Sickness/Maternity Receivab",
+"3","2","1203","1203 · Advances to Officers& Employees",
+"3","2","1204","1204 · Advances to PSO/PA related",
+"3","2","1205.","1205. · Advances to MIBSTC",
+"3","2","1206.","1206. · Advances to CSISI",
+"3","2","1207","1207 · Advances to MIB1",
+"3","2","1208","1208 · Advances to Stockholders","Advances made by Stockholders from the Company"
+"3","2","1209","1209 · Advances to/from Suppliers",
+"3","2","1210","1210 · Advances to/from MIB3",
+"3","2","1300","1300 · Inventory Asset","Costs of inventory purchased for resale"
+"3","2","1310","1300 · Inventory Asset:1310 · Uniforms Inventory",
+"3","2","1320","1300 · Inventory Asset:1320 · Office Supplies Inventory",
+"3","2","1400","1400 · Prepaid Insurance",
+"3","2","1410","1410 · Input VAT",
+"3","2","1420","1420 · Creditable Withholding Tax",
+"4","2","1510","1510 · Security Equipment",
+"4","2","1511","1510 · Security Equipment:1511 · Security Equipment - Cost",
+"4","2","1515","1510 · Security Equipment:1515 · Accumulated Depre. - SE",
+"4","2","1520","1520 · Transportation Equipment",
+"4","2","1521","1520 · Transportation Equipment:1521 · Transportation Equipment - Cost",
+"4","2","1525","1520 · Transportation Equipment:1525 · Accumulated Depre. - TE",
+"4","2","1530","1530 · Furniture & Fixture","Furniture and equipment with useful life exceeding one year"
+"4","2","1531","1530 · Furniture & Fixture:1531 · Furniture & Fixture - Cost",
+"4","2","1535","1530 · Furniture & Fixture:1535 · Accumulated Depre. - F&F","Accumulated depreciation on equipment, buildings and improvements"
+"4","2","1540","1540 · Computer Equipment & Software",
+"4","2","1541","1540 · Computer Equipment & Software:1541 · Comp. Equipt. & Software - Cost",
+"4","2","1545","1540 · Computer Equipment & Software:1545 · Accumulated Depre. - Comp.& Sof",
+"4","2","1550","1550 · Leasehold Improvements",
+"4","2","1551","1550 · Leasehold Improvements:1551 · Leasehold Improvements - Cost",
+"4","2","1555","1550 · Leasehold Improvements:1555 · Accumulated Depre. - LI",
+"4","2","1560","1560 · Communication Equipment",
+"4","2","1561","1560 · Communication Equipment:1561 · Communication Equipment - Cost",
+"4","2","1565","1560 · Communication Equipment:1565 · Accumulated Depre. - CE",
+"5","2","1700","1700 · Retirement Fund","Retirement Fund"
+"5","2","1710","1710 · Deferred Tax Asset",
+"5","2","1720","1720 · Deferred Tax Asset  - NOLCO",
+"6","2","2000","2000 · Accounts Payable",
+"7","2","2010","2010 · A/P - Sun Savings",
+"7","2","2020","2020 · A/P - Short-term Loans",
+"7","2","2030","2030 · Customer Deposits",
+"7","2","2040","2040 · A/P - CBC",
+"7","2","2100","2100 · Salaries Payable",
+"7","2","2110","2110 · SSS Contribution Payable",
+"7","2","2120","2120 · Philhealth Contribution Payable",
+"7","2","2130","2130 · HDMF Contribution Payable",
+"7","2","2140","2140 · SSS Loan Payable",
+"7","2","2150","2150 · HDMF Loan Payable",
+"7","2","2160","2160 · Employee's Bond Payable",
+"7","2","2210","2210 · Advances from MIB1","Advances from MIB1"
+"7","2","2220","2220 · Advances from MIBSTC",
+"7","2","2230","2230 · Advances from CSISI",
+"7","2","2240","2240 · MECC Contribution Payable",
+"7","2","2245","2245 · MIBSTC Training deductions",
+"7","2","2300","2300 · Accrued Expenses",
+"7","2","2310","2300 · Accrued Expenses:2310 · Accrued Expenses - 13th month",
+"7","2","2320","2300 · Accrued Expenses:2320 · Accrued Exp - 5days SIL",
+"7","2","2330","2300 · Accrued Expenses:2330 · Accrued Exp - Prof. Fees & Othe",
+"7","2","2340","2300 · Accrued Expenses:2340 · Accrued interest and penalties",
+"7","2","2350","2300 · Accrued Expenses:2350 · Accrued Exp - Holiday pay",
+"7","2","2410","2410 · Withldng Taxes Payable-Compen",
+"7","2","2420","2420 · Withldng Taxes Payable Expanded",
+"7","2","2430","2430 · Income Taxes Payable",
+"7","2","2440","2440 · Output VAT Payable","Unpaid sales taxes. Amounts charged on sales, but not yet paid to the government"
+"7","2","2450","2450 · Local Taxes Payable",
+"8","2","2510","2510 · Retirement Benefits Payable",
+"8","2","2520","2520 · Long-term Debt",
+"8","2","2530","2530 · Car Loan","Purchase of Transportation Equipment (Financing)"
+"9","2","3000","3000 · Capital Stock","Value of corporate stock"
+"9","2","3001","3001 · Opening Balance Equity","Opening balances during setup post to this account. The balance of this account should be zero after completing your setup"
+"9","2","3010","3010 · Retained Earnings","Undistributed earnings of the business"
+"10","2","4010","4010 · Security Services Income","Gross receipts from services"
+"10","2","4020","4020 · Reimbursements",
+"11","2","5110","5110 · COS - Direct Labor","Costs of items purchased and then sold to customers"
+"11","2","5120","5120 · COS - 13th mo., Leaves & Allow.",
+"11","2","5130","5130 · COS - SSS/Philhealth/HDMF Prem",
+"11","2","5140","5140 · COS - Overhead/CAPEX/Retirement",
+"11","2","5150","5150 · COS - Supplies & Small tools",
+"12","2","6000","6000 · Salaries & Wages",
+"12","2","6010","6010 · 13th Month Pay",
+"12","2","6020","6020 · Employee Benefits",
+"12","2","6025","6025 · Out of pocket expenses",
+"12","2","6026","6025 · Out of pocket expenses:6026 · OPE - Gasoline and lubricants",
+"12","2","6027","6025 · Out of pocket expenses:6027 · OPE - Toll & parking",
+"12","2","6028","6025 · Out of pocket expenses:6028 · OPE - Fare & travel expenses",
+"12","2","6029","6025 · Out of pocket expenses:6029 · OPE - Repairs & maintenance",
+"12","2","6031","6025 · Out of pocket expenses:6031 · OPE - Representation",
+"12","2","6032","6025 · Out of pocket expenses:6032 · OPE - Meetings & Client Devt.",
+"12","2","6033","6025 · Out of pocket expenses:6033 · OPE - Supplies & consumables",
+"12","2","6030","6030 · Retirement Benefits",
+"12","2","6040","6040 · SSS, Philhealth HDMF Premium",
+"12","2","6050","6050 · Leaves & Allowances",
+"12","2","6100","6100 · Rental","Rent paid for company offices or other structures used in the business"
+"12","2","6110","6110 · Office Supplies","Office supplies expense"
+"12","2","6111","6110 · Office Supplies:6111 · Office Consumables",
+"12","2","6112","6110 · Office Supplies:6112 · Small Tools",
+"12","2","6113","6110 · Office Supplies:6113 · Pantry Supplies",
+"12","2","6114","6110 · Office Supplies:6114 · Uniform Supplies",
+"12","2","6120","6120 · Electricity & Water","Water, electricity, garbage, and other basic utilities expenses"
+"12","2","6130","6130 · Telephone & Communication","Telephone and long distance charges, faxing, and other fees Not equipment purchases"
+"12","2","6140","6140 · Repairs & Maintenance","Incidental repairs and maintenance of business assets that do not add to the value or appreciably prolong its life"
+"12","2","6150","6150 · Transportation & Travel","Business-related travel expenses including airline tickets, taxi fares, hotel and other travel expenses"
+"12","2","6151","6150 · Transportation & Travel:6151 · Gasoline & Lubricants",
+"12","2","6152","6150 · Transportation & Travel:6152 · Toll and Parking",
+"12","2","6153","6150 · Transportation & Travel:6153 · Fare & Travel Expenses",
+"12","2","6200","6200 · Professional Fees","Payments to accounting professionals and attorneys for accounting or legal services"
+"12","2","6210","6200 · Professional Fees:6210 · Notarial / Legal Fees",
+"12","2","6220","6200 · Professional Fees:6220 · Audit & Consultancy Fees",
+"12","2","6225","6200 · Professional Fees:6225 · Director's fees",
+"12","2","6230","6230 · Outside Services",
+"12","2","6240","6240 · Insurance Expense","Insurance expenses"
+"12","2","6250","6250 · Representation","Business meals and entertainment expenses, including travel-related meals (may have limited deductibility)"
+"12","2","6255","6255 · Client Dev't & Recruitment",
+"12","2","6260","6260 · Advertising & Promotion","Advertising, marketing, graphic design, and other promotional expenses"
+"12","2","6270","6270 · Trainings & Seminars",
+"12","2","6280","6280 · Miscellaneous Expense",
+"12","2","6290","6290 · Depreciation Expense","Depreciation on equipment, buildings and improvements"
+"12","2","6300","6300 · Bad Debt Expense",
+"12","2","6400","6400 · Permits, Taxes & Licenses",
+"12","2","6410","6400 · Permits, Taxes & Licenses:6410 · Annual Registration Fee",
+"12","2","6420","6400 · Permits, Taxes & Licenses:6420 · Business Permits & Licenses",
+"12","2","6430","6400 · Permits, Taxes & Licenses:6430 · Local Govt Taxes",
+"12","2","6440","6400 · Permits, Taxes & Licenses:6440 · Documentary Stamp Tax",
+"12","2","6450","6400 · Permits, Taxes & Licenses:6450 · Income tax",
+"12","2","6500","6500 · Income Tax Expense - Current",
+"12","2","66000","66000 · Payroll Expenses","Payroll expenses"
+"12","2","8000","8000 · Bank Service Charges","Bank account service fees, bad check charges and other bank fees"
+"12","2","8010","8010 · Interest & Penalties","Interest payments on business loans, credit card balances, or other business debt"
+"12","2","8040","8040 · Fines, Penalties & Surcharges",
+"13","2","7000","7000 · Interest Income",
+"13","2","7010","7010 · Other Income",
+"13","2","7020","7020 · Gain/Loss on Asset Disposal",
+"14","2","8020","8020 · Provision for Income Tax",
+"14","2","8030","8030 · Provision for SSS penalties",

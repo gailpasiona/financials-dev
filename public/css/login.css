@@ -1,0 +1,109 @@
+body {
+    color: #838383;
+    font: 13px/1.7em 'Open Sans';
+}
+.messages{
+    width: auto;
+    margin: auto;
+    padding: auto;
+}
+.login-container {
+    background: none repeat scroll 0 0 #F9F9F9;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px 5px 5px 5px;
+    display: block;
+    margin: 60px auto 0;
+    width: 390px;
+}
+.login-action {
+    float: right;
+    margin-top: 18px;
+}
+.page-content {
+    padding: 16px 28px 23px;
+}
+.form-fields {
+
+}
+.form-fields .field {
+    margin-bottom: 1.25em;
+}
+.form-fields label {
+    display: none;
+}
+.form-fields input {
+    background-color: #FDFDFD;
+    box-shadow: 2px 2px 4px #F1F1F1 inset;
+    color: #8E8D8D;
+    display: block;
+    font-family: 'Open Sans';
+    font-size: 13px;
+    height: 40px;
+    margin: 0;
+    padding: 11px 15px 10px 50px;
+    width: 100%;
+}
+.username-field {
+    background: url("../images/form/user.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+.password-field {
+    background: url("../images/form/password.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+.form-action {
+    float: left;
+    margin-bottom: 1.25em;
+    margin-top: -1em;
+    width: 100%;
+}
+
+span.form-checkbox {
+    float: left;
+    margin-top: 31px;
+}
+span.form-checkbox > input[type="checkbox"] {
+    float: left;
+    opacity: 0;
+    width: 15px;
+}
+span.form-checkbox > input[type="checkbox"] + label {
+    background: url("../images/form/check.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    clear: none;
+    cursor: pointer;
+    display: block;
+    font-size: 12px;
+    height: 15px;
+    line-height: 1.2em;
+    margin: 0;
+    padding: 0 0 0 22px;
+}
+span.form-checkbox > input[type="checkbox"]:checked + label {
+    background-position: 0 -15px;
+}
+.additionals {
+    display: block;
+    line-height: 19px;
+    margin: 1.5em auto;
+    text-align: center;
+    text-shadow: 1px 1px 0 #FFFFFF;
+    width: 300px;
+}
+.login-container h1 {
+    color:  #097054;
+    font-size: 32px;
+    margin-bottom: 0.4em;
+}
+
+@media (max-width: 480px) {
+.login-container {
+    margin-top: 35px;
+    width: 280px;
+}
+.form-fields input {
+    /*width: 160px;*/
+    width: auto;
+}
+.register .form-fields input {
+    padding-left: 6px;
+    width: 204px;
+}
+}

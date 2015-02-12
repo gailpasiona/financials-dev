@@ -1,0 +1,37 @@
+.modal-dialog {
+    width: 10%;
+}
+@media(max-height:600px) and (max-width:767px) {
+    .sidebar-collapse {
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+    .modal-dialog {
+    width: auto;
+}
+}
+
+@media(max-height:400px) and (max-width:767px) {
+    .sidebar-collapse {
+        max-height: 200px;
+        overflow-y: scroll;
+    }
+    .modal-dialog {
+    width: auto;
+}
+}
+
+#records {
+  //border: 0px solid #dddddd;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+}
+#records th{
+    border-width: 0px;
+}
+#records td{
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+
