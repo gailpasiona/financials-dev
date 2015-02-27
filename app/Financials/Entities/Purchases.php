@@ -19,11 +19,18 @@ class Purchases extends FinancialModel {
 					 'approved_by' => 'required',
 					 'po_remarks' => 'required',
 					 'cancelled' => 'required',
-					 'sync' => 'required',
 					 'invoiced' => 'required'
 
         ]
     );
+
+    public static function validate($input, $ruleset) {
+        
+        $validator = \Validator::make($input, static::$rules[$ruleset]);
+        //$validator->setAttributeNames($att);
+        
+        return $validator;
+    }
 
 	public static function boot()
     {
@@ -32,15 +39,18 @@ class Purchases extends FinancialModel {
         static::creating(function($record)
         {
             $record->created_by =\Auth::user()->full_name;
-            $record->last_updated_by = \Auth::user()->id;
+            // $record->last_updated_by = \Auth::user()->id;
         });
  
-        static::updating(function($record)
-        {
-            $record->last_updated_by = \Auth::user()->id;
-        });
+        // static::updating(function($record)
+        // {
+        //     $record->last_updated_by = \Auth::user()->id;
+        // });
     }
 
+    public function context(){
+		return $this->belongsTo('\Company', 'company_id');
+	}
 
 	public function supplier(){
 		$showable_fields = array('id','supplier_name','address');

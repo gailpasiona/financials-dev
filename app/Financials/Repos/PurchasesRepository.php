@@ -53,4 +53,49 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 	public function find_selected_columns($id,$fields){
 		return Purchases::find($id)->select();
 	}
+
+	public function create($data){
+		$record = new Purchases;
+		$record->po_number = array_get($data, 'po_number');
+        $record->po_total_amount = array_get($data, 'amount');
+        $record->po_date = array_get($data, 'po_date');
+        $record->requestor = array_get($data, 'requestor');
+        $record->supplier_id = array_get($data, 'payee');
+        $record->po_paymentterms = 'N/A';
+		$record->po_downpayment = 'N/A';
+		$record->requestor_dept_det ='N/A';
+		$record->po_fullyreceived = '0';
+		$record->po_status = 'N/A';
+		$record->approved_by = 'N/A';
+		$record->po_remarks = 'N/A';
+		$record->cancelled = '0';
+		$record->invoiced = 'N';
+
+		$filter = Purchases::validate($record->toArray(), 'entry');
+		
+		if($filter->passes()) {
+				
+			if($this->save($record))
+				return array('saved' => true, 'object' => $record);
+
+			else return array('saved' => false, 'object' => 'Unable to create Payable');
+
+	    }
+
+	    else return array('saved' => false , 'object' => $filter->messages());
+
+	}
+
+	public function save(Purchases $instance)
+    {
+        $entity = \Company::where('alias', \Session::get('company'))->first();
+
+        $instance->context()->associate($entity);
+         
+         return $instance->save();
+
+		// $comment = $post->comments()->save($comment);
+  //       return $instance->save();
+        //return $entity->invoices()->save($instance);
+    }
 }

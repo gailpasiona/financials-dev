@@ -25,7 +25,7 @@ class TransactionController extends \BaseController{
 
 	public function store(){
 		//company_id
-		$new_record->po_number = \Input::get('');
+		//$new_record->po_number = \Input::get('');
 		// $new_record->supplier_id = \Input::get('');
 		// $new_record->po_date = \Input::get('');
 		// $new_record->po_total_amount = \Input::get('');
@@ -42,7 +42,39 @@ class TransactionController extends \BaseController{
 		// $new_record->sync = \Input::get('');
 		// $new_record->invoiced = \Input::get('');
 
-		return \Response::json(\Input::all());
+		$return_info = array();
+
+		try{
+
+			\DB::beginTransaction();
+
+			$record = $this->purchases->create(array('po_number' => \Input::get('po_number'), 'amount'=>\Input::get('amount_request'), 
+				'payee' =>\Input::get('payee'), 'requestor' => \Input::get('requestor'), 'po_date' => \Input::get('po_date')));
+
+			//\DB::commit();
+
+			if($record['saved']){
+					// $sdd = $repo->updateById(\Input::get('reference'));
+					//return \Response::json(array('status' => 'success', 'message' => 'Invoice Created'));
+				
+					\DB::commit();
+					$return_info['status'] = 'success';
+					$return_info['message'] = 'Payable created!';
+
+			}
+
+			else{
+				$return_info['status'] = 'success_error';
+				$return_info['message'] = $record['object'];
+			}
+
+		}catch(\PDOException $e){
+			\DB::rollBack();
+			$return_info['status'] = 'success_failed';
+			$return_info['message'] = $e->getmessage();//'Transaction Failed, Please contact System Administrator';
+		}
+
+		return \Response::json($return_info);
 	}
 
 
