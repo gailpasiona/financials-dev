@@ -21,7 +21,7 @@
                  
                   <div class="panel-footer clearfix">
                     <div class="pull-left col-md-3">
-                        <a class="btn btn-md btn-danger" href="{{{ action('Financials\Controllers\TransactionController@create') }}}" data-toggle="modal" data-target="#modal_form"><i><strong>      Create     </strong></i></a>&nbsp;
+                        <!-- <a class="btn btn-md btn-danger" href="{{{ action('Financials\Controllers\TransactionController@create') }}}" data-toggle="modal" data-target="#modal_form"><i><strong>      Create     </strong></i></a>&nbsp; -->
                     </div>
 
         <div class="col-md-9">
