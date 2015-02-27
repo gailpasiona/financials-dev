@@ -14,6 +14,37 @@ class TransactionController extends \BaseController{
 		$this->purchases = $purchases;
 	}
 
+	public function create(){
+		$repo = \App::make('Financials\Supplier');
+		
+		$data['payee'] = $repo->selectAll();
+		$data['title'] = 'Create Supplier Invoice';
+
+		return \View::make('financials.modals.form_po')->with('data', $data);
+	}
+
+	public function store(){
+		//company_id
+		$new_record->po_number = \Input::get('');
+		// $new_record->supplier_id = \Input::get('');
+		// $new_record->po_date = \Input::get('');
+		// $new_record->po_total_amount = \Input::get('');
+		// $new_record->po_paymentterms = \Input::get('');
+		// $new_record->po_downpayment = \Input::get('');
+		// $new_record->requestor = \Input::get('');
+		// $new_record->requestor_dept_det = \Input::get('');
+		// $new_record->po_fullyreceived = \Input::get('');
+		// $new_record->po_status = \Input::get('');
+		// $new_record->created_by = \Input::get('');
+		// $new_record->approved_by = \Input::get('');
+		// $new_record->po_remarks = \Input::get('');
+		// $new_record->cancelled = \Input::get('');
+		// $new_record->sync = \Input::get('');
+		// $new_record->invoiced = \Input::get('');
+
+		return \Response::json(\Input::all());
+	}
+
 
 	public function index(){
 		return \View::make('layouts.user_dashboard')->with('user', \Confide::user()->username);
@@ -56,10 +87,10 @@ class TransactionController extends \BaseController{
 		$load = null;
 		$repo = \App::make('Financials\Coa');
 		// $data = $repo->getAccountsByGroup(\Input::get('type'));
-		if(\Input::get('type') == 1)
-			$data = $repo->getAccountsBySub(array('3','4','5','6','7'));
-		else
-			$data = $repo->getAccountsByGroup(\Input::get('type'));
+		//if(\Input::get('type') == 1)
+		//	$data = $repo->selectAll();//$repo->getAccountsBySub(array('3','4','5','6','7'));
+		//else
+			$data = $repo->selectAll();//$repo->getAccountsByGroup(\Input::get('type'));
 
 	
 		return \Response::json($data);

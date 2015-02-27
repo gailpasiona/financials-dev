@@ -20,8 +20,11 @@
             
                  
                   <div class="panel-footer clearfix">
+                    <!-- <div class="pull-left col-md-3">
+                        <a class="btn btn-sm btn-warning" href="{{{ action('Financials\Controllers\APInvoiceController@create') }}}" data-toggle="modal" data-target="#modal_form"><strong>  Create Supplier Invoice  </strong></a>&nbsp;
+                    </div> -->
 
-        <div class="pull-right">
+        <div class="col-md-12">
             <!-- <div class="controls">
             <select class="form-control" name="type" id="type">
                      <option value="">Default</option>
@@ -31,7 +34,7 @@
         </div> -->
             <!-- <a href="{{ route('user_form')}}" class="btn btn-warning" data-toggle="modal" data-target="#users_modal">Create New</a> -->
             <form class="form-inline">
-              <div class="control-group">
+              <div class="control-group pull-right">
                 <!-- <label class="control-label">Reload Table:</label> -->
                 <div class="controls">
                   <select class="form-control" id="reload_type">

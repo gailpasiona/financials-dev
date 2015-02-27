@@ -24,7 +24,7 @@ class APInvoiceController extends \BaseController{
 	}
 
 	public function create(){
-		// return "hello";
+		
 	}
 
 	public function store_old(){
@@ -109,7 +109,7 @@ class APInvoiceController extends \BaseController{
 
 		$register_info = array();
 
-		$register_info['coa_list'] = $coa_repo->getAccountsBySub(array('3','4','5','6','7'));
+		$register_info['coa_list'] = $coa_repo->selectAll();//getAccountsBySub(array('3','4','5','6','7'));
 		$register_info['cost_dept'] = $data[0]['reference']['requestor'];
 		$register_info['invoice_no'] = $data[0]['register_id'];
 		$register_info['invoice_date'] = $data[0]['invoice_date'];

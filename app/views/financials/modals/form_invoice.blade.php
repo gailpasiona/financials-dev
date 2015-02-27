@@ -20,14 +20,7 @@
                                   @else
                                     <input class="form-control" type="hidden" name="invoice_no" id="invoice_no" value="{{{$data['invoice_no']}}}">
                                   @endif
-                                    <label for="cost_dept" class="col-md-4 control-label">Cost Department</label>
-                                    <div class="col-md-6">
-                                        @if(!isset($data['cost_dept']))
-                                          <input class="form-control" placeholder="Cost Department" type="text" readonly = "readonly" name="cost_dept" id="cost_dept" value="">
-                                        @else
-                                          <input class="form-control" placeholder="Cost Department" type="text" readonly = "readonly" name="cost_dept" id="cost_dept" value="{{{$data['cost_dept']}}}">
-                                        @endif
-                                    </div>
+                
 
                                 </div>
 

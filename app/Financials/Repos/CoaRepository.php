@@ -21,7 +21,9 @@ class CoaRepository implements CoaRepositoryInterface {
 	}
 
 	public function selectAll(){
+		$coa = Coa::company()->get();
 
+		return $coa;
 	}
 
 	public function find($id){

@@ -20,8 +20,11 @@
             
                  
                   <div class="panel-footer clearfix">
+                    <div class="pull-left col-md-3">
+                        <a class="btn btn-md btn-danger" href="{{{ action('Financials\Controllers\TransactionController@create') }}}" data-toggle="modal" data-target="#modal_form"><i><strong>      Create     </strong></i></a>&nbsp;
+                    </div>
 
-        <div class="pull-right">
+        <div class="col-md-9">
             <!-- <div class="controls">
             <select class="form-control" name="type" id="type">
                      <option value="">Default</option>
@@ -31,8 +34,9 @@
         </div> -->
             <!-- <a href="{{ route('user_form')}}" class="btn btn-warning" data-toggle="modal" data-target="#users_modal">Create New</a> -->
             <form class="form-inline">
-              <div class="control-group">
+              <div class="control-group pull-right">
                 <!-- <label class="control-label">Reload Table:</label> -->
+                
                 <div class="controls">
                   <select class="form-control" id="reload_type">
                             <option value="">For Invoicing </option>
@@ -129,16 +133,7 @@ $('#table-purchases').bootstrapTable({
                             //width: 200/3,
                             //formatter: json2string,
                             sortable: false
-                        }, {
-                            field: 'approved_by',
-                            title: 'Approved By',
-                            align: 'left',
-                            valign: 'center',
-                            //valign: 'bottom',
-                            //width: 200/3,
-                            //formatter: json2string,
-                            sortable: false
-                        }, {
+                        },{
                             field: 'id',
                             title: 'Action',
                             align: 'center',

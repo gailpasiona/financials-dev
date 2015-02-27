@@ -27,7 +27,7 @@ class CVController extends \BaseController{
 
 		$data_needed = array('rfp_number' => null, 'amount_requested' => null, 'supplier' => null);
 
-		$data_needed['coa_list'] = $coa_repo->getAccountsBySub(array('1'));
+		$data_needed['coa_list'] = $coa_repo->selectAll();//getAccountsBySub(array('1'));
 		$data_needed['rfp_number'] = $data[0]['rfp_number'];
 		$data_needed['amount_requested'] = $data[0]['amount_requested'];
 		$data_needed['supplier'] = $data[0]['register']['reference']['supplier']['supplier_name'];
@@ -85,7 +85,7 @@ class CVController extends \BaseController{
 		// $rfp_info = array();
 		$cv['cv_number'] = $data[0]['cv_number'];
 		$cv['payment_bank'] = $data[0]['payment_bank'];
-		$cv['coa_list'] = $coa_repo->getAccountsBySub(array('1'));
+		$cv['coa_list'] = $coa_repo->selectAll();//getAccountsBySub(array('1'));
 		$cv['amount_requested'] = $data[0]['amount'];
 		$cv['description'] = $data[0]['description'];
 		$cv['supplier'] = $data[0]['rfp']['register']['reference']['supplier']['supplier_name'];
@@ -264,7 +264,7 @@ class CVController extends \BaseController{
 
 		$register_info = array();
 
-		$register_info['coa_list'] = $coa_repo->getAccountsBySub(array('1','6'));
+		$register_info['coa_list'] = $coa_repo->selectAll();//getAccountsBySub(array('1','6'));
 		$register_info['invoice'] = $record[0]['cregister']['register_id'];
 		$register_info['amount'] = $record[0]['cregister']['account_value'];
 		$register_info['payee'] = $record[0]['rfp']['register']['reference']['supplier']['supplier_name'];
