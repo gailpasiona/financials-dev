@@ -24,13 +24,13 @@ class RegisterRepository implements RegisterRepositoryInterface {
 
 	public function getRecord($ref){
 		$fields = array('id','register_id','register_refno','account_value', 'po_id');
-		return Register::where('register_id',$ref)->company()->aging()->with('reference.supplier','rfp')->get($fields);
+		return Register::where('register_id',$ref)->company()->aging()->with('reference.supplier','rfp', 'lines')->get($fields);
 		//return \DB::getQueryLog();
 	}
 
 	public function getOpenRecord($ref){
-		$fields = array('id','register_id','register_refno','account_value', 'po_id');
-		return Register::where('register_id',$ref)->company()->open()->with('reference.supplier','rfp')->get($fields);
+		$fields = array('id','register_id','register_refno','account_value', 'po_id', 'invoice_date');
+		return Register::where('register_id',$ref)->company()->open()->with('reference.supplier','rfp','lines')->get($fields);
 		//return \DB::getQueryLog();
 	}
 
@@ -94,7 +94,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		return \DB::table('accounting_register')->count();
 	}
 
-	public function create($data){
+	public function create_old($data){
 		$continue = true;
 		
 
@@ -155,7 +155,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 
 			if($filter->passes()) {
 				
-				if(isset($register->account)) unset($register->account);
+				if(isset($register->line_account)) unset($register->account);
 				if(isset($register->account_amount)) unset($register->account_amount);
 				if(isset($register->account_description)) unset($register->account_description);
 	        	
@@ -172,6 +172,53 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		
 	}
 
+	public function create($data){
+		// $continue = true;
+		
+		$register = new Register;
+
+		$register->register_id = array_get($data,'prefix') . \Helpers::recordNumGen($this->entries_count() + 1);//array_get($data,'ref') . "-" . ($this->entries_count() + 1);
+		
+		$register->module_id = array_get($data,'module_id');
+
+		$register->account_id = 3;
+
+		$register->po_id = array_get($data,'ref_id');
+
+		$register->account_value = array_get($data,'amount');
+
+		$register->register_refno = array_get($data, 'refno');
+
+		$register->invoice_date = array_get($data, 'invoice_date');
+
+		$register->entry_type = array_get($data, 'entry_type');
+
+		$register->line_account = array_get($data, 'line_accounts');
+		
+		$register->line_amount = array_get($data, 'line_amounts');
+
+		$register->line_description = array_get($data, 'line_descriptions');
+
+		$filter = Register::validate($register->toArray(), array_get($data, 'trans_type'));
+
+		if($filter->passes()) {
+				
+			if(isset($register->entry_type)) unset($register->entry_type);
+			if(isset($register->line_amount)) unset($register->line_amount);
+			if(isset($register->line_account)) unset($register->line_account);
+			if(isset($register->line_description)) unset($register->line_description);
+	        	
+			if($this->save($register))
+				return array('saved' => true, 'object' => $register);
+
+			else return array('saved' => false, 'object' => 'Unable to create check register');
+
+	    }
+
+	    else return array('saved' => false , 'object' => $filter->messages());
+
+	}
+
 
 	public function modify($ref,$data){
 		$register = Register::where('register_id', $ref)->first();
@@ -179,10 +226,23 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		if($register->register_post == 'N'){
 			$register->account_value = array_get($data,'amount_request');
 			$register->register_refno = array_get($data,'register_refno');
+			$register->invoice_date = array_get($data, 'invoice_date');
 
-			$filter = Register::validate($register->toArray(),'entry');
+			$register->entry_type = array_get($data, 'entry_type');
+
+			$register->line_account = array_get($data, 'line_accounts');
+		
+			$register->line_amount = array_get($data, 'line_amounts');
+
+			$register->line_description = array_get($data, 'line_descriptions');
+
+			$filter = Register::validate($register->toArray(),'update');
 
 			if($filter->passes()) {
+				if(isset($register->entry_type)) unset($register->entry_type);
+				if(isset($register->line_amount)) unset($register->line_amount);
+				if(isset($register->line_account)) unset($register->line_account);
+				if(isset($register->line_description)) unset($register->line_description);
 	        	
 				$this->update($register);
 
@@ -287,6 +347,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		$register = Register::where('register_id', array_get($ref, 'invoice_no'))->first();
 		$register->account = array_get($ref, 'account');
 		$register->account_amount = array_get($ref, 'account_amount');
+		$register->entry_type = array_get($ref, 'entry_type');
 
 		if($register->register_post == 'N'){
 			$filter = Register::validate($register->toArray(),'post');

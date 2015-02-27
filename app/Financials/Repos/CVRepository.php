@@ -24,12 +24,16 @@ class CVRepository implements CVRepositoryInterface {
 		return CV::where('cv_number', $record)->first();
 	}
 
+	public function findRecordwithRef($record){
+		return CV::where('cv_number', $record)->with('rfp.register.lines')->first();
+	}
+
 	public function pullRecord($record){
 		return CV::where('cv_number', $record)->with('cregister')->get();
 	}
 
 	public function traceRecord($record){
-		return CV::where('cv_number', $record)->with('rfp.register.reference.supplier','cregister')->get();
+		return CV::where('cv_number', $record)->with('rfp.register.reference.supplier','cregister.lines')->get();
 	}
 
 	public function traceRecordObj($record){
@@ -56,7 +60,7 @@ class CVRepository implements CVRepositoryInterface {
 	// }
 
 	public function getOpenRecord($ref){
-		$fields = array('id','cv_number','cheque_number','amount','description','rfp_id');
+		$fields = array('id','cv_number','cheque_number','amount','description','rfp_id','payment_bank');
 		return CV::where('cv_number',$ref)->company()->open()->with('rfp.register.reference.supplier')->get($fields);
 		//return \DB::getQueryLog();
 	}
@@ -82,7 +86,7 @@ class CVRepository implements CVRepositoryInterface {
 
 		$cv->cv_number = 'CV ' . \Helpers::recordNumGen($this->entries_count() + 1);//array_get($data,'ref') . "-" . ($this->entries_count() + 1);
 		$cv->amount = array_get($data,'amount_request');
-		$cv->cheque_number = array_get($data, 'cheque_number');
+		//$cv->cheque_number = array_get($data, 'cheque_number');
 		$cv->description = array_get($data,'description');
 
 		$filter = CV::validate($cv->toArray(), 'entry');
@@ -103,8 +107,9 @@ class CVRepository implements CVRepositoryInterface {
 	public function modify($ref,$data){
 		$cv = CV::where('cv_number', $ref)->first();
 		if($cv->approved == 'N'){
-			$cv->cheque_number = array_get($data,'cheque_number');
+			//$cv->cheque_number = array_get($data,'cheque_number');
 			$cv->description = array_get($data,'description');
+			$cv->payment_bank = array_get($data,'bank');
 			// $register->register_date_posted = date("Y-m-d H:i:s");
 			$filter = CV::validate($cv->toArray(),'entry');
 

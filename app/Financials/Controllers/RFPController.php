@@ -20,6 +20,23 @@ class RFPController extends \BaseController{
 		return \View::make('financials.rfp_main')->with('user', \Confide::user()->username);
 	}
 
+	private function extractAP($data){
+		$header_account = \App::make('Financials\Coa')->findByName('Accounts Payable')->account_id;
+		$return_value = null;
+		foreach ($data as $line) {
+			if($line['account_id'] == $header_account){
+				// $return_value = array('account_id' => $line['account_id'], 'amount' => $line['line_amount'],
+				// 	['description'] => 'N/A');
+				$return_value = $line['line_amount'];
+
+				break;
+			}
+		}
+
+		return $return_value;
+
+	}
+
 	public function create(){
 		$repo = \App::make('Financials\Register');
 		$data = $repo->getRecord(\Input::get('invoice'));
@@ -28,7 +45,7 @@ class RFPController extends \BaseController{
 
 		$register_info['cost_dept'] = $data[0]['reference']['requestor'];
 		$register_info['invoice_ref'] = $data[0]['register_id'];
-		$register_info['amount_request'] = $data[0]['account_value'];
+		$register_info['amount_request'] = $this->extractAP($data[0]['lines']);//$data[0]['account_value'];
 		$register_info['payee_name'] = $data[0]['reference']['supplier']['supplier_name'];
 		$register_info['payee_address'] = $data[0]['reference']['supplier']['address'];
 		$register_info['title'] = "Create RFP for Invoice " . $data[0]['register_id'];

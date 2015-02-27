@@ -106,12 +106,6 @@ $('#table-rfp').bootstrapTable({
                             formatter: amountFormatter,
                             sortable: false
                         },{
-                            field: 'cheque_number',
-                            title: 'Cheque No',
-                            align: 'center',
-                            valign: 'center',
-                            sortable: false
-                        },{
                             field: 'description',
                             title: 'Description',
                             align: 'left',
@@ -139,7 +133,7 @@ function useractionFormatter(value,row){
     if(row.approved == 'Y'){
         
             url = "cv/post/" + encodeURIComponent(value);
-            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Post<strong></a>';
+            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Complete Cheque<strong></a>';
         
         
     }
@@ -197,7 +191,7 @@ function show_message_in_parent(data){
              else if(data.status == 'success_failed'){
                   $(".messages").append('<div class="message_content alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert">\n\
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\n\
-                    <strong>Transaction Succeeded!</strong> <br />'+data.message+' </div>');
+                    <strong>Transaction Failed!</strong> <br />'+data.message+' </div>');
              }
              else{
                   $(".messages").append('<div class="message_content alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert">\n\

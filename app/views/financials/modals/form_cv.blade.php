@@ -40,6 +40,21 @@
                                 </div>
 
                                 <div class="form-group row">
+                                  <label for="amount_request" class="col-md-4 control-label">Payment Method</label>
+                                  <div class="col-md-6 coa">
+                                        <select class="form-control acct_old" id="bank" name="bank">
+                                        @foreach($data['coa_list'] as $coa)
+                                            @if (isset($data['payment_bank']) && $data['payment_bank'] == $coa['account_id'])
+                                                <option selected="selected" value="{{{$coa['account_id']}}}">{{$coa['account_title']}}</option>
+                                            @else
+                                                <option value="{{{$coa['account_id']}}}">{{$coa['account_title']}}</option>
+                                            @endif
+                                        @endforeach
+                                     </select>
+                                  </div>
+                                </div>
+
+                                <!-- <div class="form-group row">
                                     <label for="payee_address" class="col-md-4 control-label">Cheque Number</label>
                                     <div class="col-md-6">
                                       @if(!isset($data['cheque_number']))
@@ -48,7 +63,7 @@
                                         <input class="form-control" placeholder="Cheque Number" type="text" name="cheque_number" id="cheque_number" value="{{{$data['cheque_number']}}}">
                                       @endif
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group row">
                                     <label for="description" class="col-md-4 control-label">Description</label>

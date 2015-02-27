@@ -14,6 +14,12 @@ class CoaRepository implements CoaRepositoryInterface {
 		return $group->accounts;
 	}
 
+	public function getAccountsBySub($ids){
+		$group = Coa::whereIn('sub_acct_id',$ids)->company()->get();
+
+		return $group;//->coa_accounts;
+	}
+
 	public function selectAll(){
 
 	}

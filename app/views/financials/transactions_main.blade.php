@@ -57,11 +57,13 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ URL::asset('css/bootstrap-table.css')}}" />
+<link rel="stylesheet" href="{{ URL::asset('css/datepicker.css')}}" />
 @stop
 @section('scripts')
 <script src="{{ URL::asset('js/bootstrap-table.js')}}"></script>
 <script src="{{ URL::asset('js/processing.js')}}"></script>
 <script src="{{ URL::asset('js/accounting.js')}}"></script>
+<script src="{{ URL::asset('js/datepicker.js')}}"></script>
 <script>
 
 $('#table-purchases').bootstrapTable({

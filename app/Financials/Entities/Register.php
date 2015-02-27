@@ -7,7 +7,21 @@ class Register extends FinancialModel {
 	public static $rules = array(
         'entry' => [
                      'po_id'  => 'required',
-                     'account_value' => 'required|amount'
+                     'account_value' => 'required|amount',
+                     'invoice_date' => 'required|date',
+                     'entry_type' => 'required',
+                     'line_account' => 'required',
+                     'line_amount' => 'required',
+                     'line_description' => 'required'
+                     //'register_refno'  =>  'alpha_spaces'
+        ],
+        'update' => [
+                     'account_value' => 'required|amount',
+                     'invoice_date' => 'required|date',
+                     'entry_type' => 'required',
+                     'line_account' => 'required',
+                     'line_amount' => 'required',
+                     'line_description' => 'required'
                      //'register_refno'  =>  'alpha_spaces'
         ],
         'post' => [
@@ -15,7 +29,8 @@ class Register extends FinancialModel {
                      'account_value' => 'required|amount',
                      'register_refno'  =>  'required',
                      'account' => 'required',
-                     'account_amount' => 'required'
+                     'account_amount' => 'required',
+                     'entry_type' => 'required'
         ],
         'sales_entry' => [
                      'po_id'  => 'required',
@@ -36,20 +51,20 @@ class Register extends FinancialModel {
      public static function validate($input, $ruleset) {
         $att = array();
        //extra validation rules for dynamic fields
-        if(isset($input['account'])){
-            for($i=0;$i < count($input['account']);$i++){
+        if(isset($input['line_account'])){
+            for($i=0;$i < count($input['line_account']);$i++){
                 $line = $i + 1;
 
-                static::$rules[$ruleset]["account.{$i}"] = 'required|alpha_spaces';
-                static::$rules[$ruleset]["account_amount.{$i}"] = 'required|amount';
+                static::$rules[$ruleset]["line_account.{$i}"] = 'required|alpha_spaces';
+                static::$rules[$ruleset]["line_amount.{$i}"] = 'required|amount';
                 
-                if(isset($input['account_description'])){
-                    static::$rules[$ruleset]["account_description.{$i}"] = 'required';
-                    $att["account_description.{$i}"] = "Account description for Line " . "{$line}";
+                if(isset($input['line_description'])){
+                    static::$rules[$ruleset]["line_description.{$i}"] = 'required';
+                    $att["line_description.{$i}"] = "Entry description for Line " . "{$line}";
                 }
                  
-                $att["account.{$i}"] = "Account for Line " . "{$line}";
-                $att["account_amount.{$i}"] = "Amount for account line " . "{$line}";
+                $att["line_account.{$i}"] = "Account for Line " . "{$line}";
+                $att["line_amount.{$i}"] = "Amount for line " . "{$line}";
             }
         }
 
@@ -116,6 +131,10 @@ class Register extends FinancialModel {
     }
 
     public function sales_lines(){
+        return $this->hasMany('Financials\Entities\Invoiceline', 'register_id'); //same with lines
+    }
+
+    public function lines(){
         return $this->hasMany('Financials\Entities\Invoiceline', 'register_id');
     }
 

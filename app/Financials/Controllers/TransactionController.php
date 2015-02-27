@@ -55,7 +55,12 @@ class TransactionController extends \BaseController{
 	public function coa_list(){
 		$load = null;
 		$repo = \App::make('Financials\Coa');
-		$data = $repo->getAccountsByGroup(\Input::get('type'));
+		// $data = $repo->getAccountsByGroup(\Input::get('type'));
+		if(\Input::get('type') == 1)
+			$data = $repo->getAccountsBySub(array('3','4','5','6','7'));
+		else
+			$data = $repo->getAccountsByGroup(\Input::get('type'));
+
 	
 		return \Response::json($data);
 	}

@@ -9,5 +9,9 @@ class Coa extends FinancialModel {
 		$showable_fields = array('account_id', 'sub_acct_id', 'account_title');
 		return $this->belongsTo('Financials\Entities\CoaSub', 'sub_acct_id')->company()->select();
 	}
+
+	public function bank(){
+		return $this->belongsTo('Financials\Entities\Bank', 'account_id')->company();
+	}
 	
 }

@@ -21,9 +21,9 @@ class JournalRepository implements JournalRepositoryInterface {
 			array_push($bulk, $bulk_line);
 		}
 		//header account
-		array_push($bulk, array('company_id' => array_get($data, 'entity'), 'module_id' => array_get($data, 'module'), 'account_id' => $data['header_account'], 
-				'journal_date' => date("Y-m-d H:i:s"), 'debit' => $data['header_debit'], 'credit' => $data['header_credit'], 
-				'ref_no' => array_get($data, 'reference')));
+		// array_push($bulk, array('company_id' => array_get($data, 'entity'), 'module_id' => array_get($data, 'module'), 'account_id' => $data['header_account'], 
+		// 		'journal_date' => date("Y-m-d H:i:s"), 'debit' => $data['header_debit'], 'credit' => $data['header_credit'], 
+		// 		'ref_no' => array_get($data, 'reference')));
 
 		return Journal::insert($bulk);
 	}

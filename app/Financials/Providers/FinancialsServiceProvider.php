@@ -23,6 +23,8 @@ class FinancialsServiceProvider extends ServiceProvider {
 
 		$this->app->bind('Financials\Repos\InvoiceLineRepositoryInterface', 'Financials\Repos\InvoiceLineRepository');
 
+		$this->app->bind('Financials\Repos\BankRepositoryInterface', 'Financials\Repos\BankRepository');
+
 		$this->app->bind('Financials\Register', function(){
 			return new \Financials\Repos\RegisterRepository;
 		});
@@ -57,6 +59,10 @@ class FinancialsServiceProvider extends ServiceProvider {
 
 		$this->app->bind('Financials\InvoiceLine', function(){
 			return new \Financials\Repos\InvoiceLineRepository;
+		});
+
+		$this->app->bind('Financials\Bank', function(){
+			return new \Financials\Repos\BankRepository;
 		});
 	}
 

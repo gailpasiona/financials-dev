@@ -21,9 +21,9 @@ class GenLedgerRepository implements GenLedgerRepositoryInterface {
 			array_push($bulk, $bulk_line);
 		}
 
-		array_push($bulk, array('company_id' => array_get($data, 'entity'), 'module_id' => array_get($data, 'module'), 'account_id' => array_get($data,'header_account'), 
-				'ledger_date' => date("Y-m-d H:i:s"), 'ledger_debit' => array_get($data,'header_debit'), 'ledger_credit' => array_get($data,'header_credit'), 
-				'ledger_reference' => array_get($data, 'reference')));
+		// array_push($bulk, array('company_id' => array_get($data, 'entity'), 'module_id' => array_get($data, 'module'), 'account_id' => array_get($data,'header_account'), 
+		// 		'ledger_date' => date("Y-m-d H:i:s"), 'ledger_debit' => array_get($data,'header_debit'), 'ledger_credit' => array_get($data,'header_credit'), 
+		// 		'ledger_reference' => array_get($data, 'reference')));
 
 		return Genledger::insert($bulk);
 	}

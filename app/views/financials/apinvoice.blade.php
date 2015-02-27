@@ -166,7 +166,7 @@ function useractionFormatter(value,row){
         // return '<a class="btn btn-sm btn-success" href="'+ url +'">Post Invoice</a>';
         return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Edit</strong></a>&nbsp;' + 
 
-          '<a class="btn btn-sm btn-warning" href="'+ posturl +'" data-toggle="modal" data-target="#modal_form"><strong>Post</strong></a>';
+          '<a class="btn btn-sm btn-danger" href="'+ posturl +'" data-toggle="modal" data-target="#modal_form"><strong>Validate</strong></a>';
         // '<button type="button" class="btn btn-sm btn-success" onclick="invoice_action(\'' + value + '\');"><strong>Post</strong></button>';
     }
         

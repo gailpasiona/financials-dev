@@ -125,6 +125,7 @@ Route::group(['prefix' => 'financials/' . Request::segment(2)], function(){
     Route::get('AP/cv_requests', array('as' => 'list_payment_requests', 'uses' => 'Financials\Controllers\CVController@list_requests'));
     Route::post('AP/rfp/approval', 'Financials\Controllers\RFPController@approve');
     Route::post('AP/cv/approval', 'Financials\Controllers\CVController@approve');
+    Route::get('coa_list', 'Financials\Controllers\TransactionController@coa_list'); //AP/coa_list
     Route::get('AP/coa_list', 'Financials\Controllers\TransactionController@coa_list');
     Route::get('Cashier/coa_list', 'Financials\Controllers\TransactionController@coa_list');
 	

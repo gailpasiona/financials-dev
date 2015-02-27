@@ -83,6 +83,7 @@ var AccountrowNum = 0;
     
     switch(type){
       case 2:
+
       var row = '<div id="AccountrowNum'+AccountrowNum+'" class="col-md-12 col-md-offset-0">\n\ \n\
         <div class="col-md-4 coa"><span class="col-md-1 control-label"></span>\n\
         <select class="form-control acct" id="account[]" name="account[]"></select></div>\n\ ';
@@ -100,13 +101,21 @@ var AccountrowNum = 0;
         break;
       default:
          var row = '<div id="AccountrowNum'+AccountrowNum+'" class="col-md-12 col-md-offset-0">\n\ \n\
-        <div class="col-md-7 coa"><span class="col-md-1 control-label"></span>\n\
+         <div class="col-md-11"><div class="col-md-2"><span class="col-md-1 control-label"></span><select class="form-control" id="entry_type[]" name="entry_type[]"> \n\
+         <option value="0"> Debit</option> \n\
+         <option value="1"> Credit</option> \n\
+         </select></div>\n\
+        <div class="col-md-4 coa"><span class="col-md-1 control-label"></span>\n\
         <select class="form-control acct" id="account[]" name="account[]"></select></div>\n\ ';
     
-        var row1 = '<div class="col-md-4"><span class="col-md-1 control-label"></span>\n\
+        var row1 = '<div class="col-md-2"><span class="col-md-1 control-label"></span>\n\
                 <input type="text" class="form-control" id="account_amount[]" name="account_amount[]" placeholder="Amount"></div>\n\ ';
    
-        var r = row + row1 + '<div class="col-sm-1"> <span class="col-md-1 control-label"></span><button type="button" class="close" onclick="removeAccountRow('+AccountrowNum+');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></div></div>';
+        var r = row + row1 + 
+        '<div class="col-md-4"><span class="col-md-4 control-label"></span>\n\
+                <input type="text" class="form-control" id="line_description[]" name="line_description[]" placeholder="Description"></div></div>\n\ ' +
+        '<div class=col-md-1><div class="col-sm-1"> <span class="col-md-1 control-label"></span><button type="button" class="close" onclick="removeAccountRow('+AccountrowNum+');"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></div></div></div>';
+        
         jQuery('.account_items').append(r);
         load_accounts($('.acct'), invoice_accounts);
         break;

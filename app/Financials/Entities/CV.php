@@ -7,13 +7,13 @@ class CV extends FinancialModel {
         'entry' => [
                      'cv_number'  => 'required',
                      'amount' => 'required|amount',
-                     'cheque_number'  =>  'alpha_num',
+                     //'cheque_number'  =>  'alpha_num',
                      'description'    =>  'required'
         ],
         'post' => [
                      'cv_number'  => 'required',
                      'amount' => 'required|amount',
-                     'cheque_number'  =>  'required|alpha_num',
+                     //'cheque_number'  =>  'required|alpha_num',
                      'description'    =>  'required'
         ]
         
@@ -41,7 +41,7 @@ class CV extends FinancialModel {
 
     public function rfp(){
         $showable_fields = array('id','invoice_id');
-        return $this->belongsTo('Financials\Entities\Rfp', 'rfp_id')->select($showable_fields);
+        return $this->belongsTo('Financials\Entities\Rfp', 'rfp_id')->select();
     }
 
     public function cregister(){
