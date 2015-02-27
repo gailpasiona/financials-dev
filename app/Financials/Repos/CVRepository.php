@@ -86,6 +86,7 @@ class CVRepository implements CVRepositoryInterface {
 
 		$cv->cv_number = 'CV ' . \Helpers::recordNumGen($this->entries_count() + 1);//array_get($data,'ref') . "-" . ($this->entries_count() + 1);
 		$cv->amount = array_get($data,'amount_request');
+		$cv->payment_bank = array_get($data,'bank');
 		//$cv->cheque_number = array_get($data, 'cheque_number');
 		$cv->description = array_get($data,'description');
 

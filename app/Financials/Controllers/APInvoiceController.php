@@ -236,7 +236,7 @@ class APInvoiceController extends \BaseController{
 
 		if($validate_record['passed'] > 0){
 
-			$post_check = $this->prePostCheck(\Input::only('amount_request','account_amount','entry_type'));
+			$post_check = $this->prePostCheck(\Input::only('account','amount_request','account_amount','entry_type'));
 
 			if($post_check['passed']){
 
@@ -259,12 +259,13 @@ class APInvoiceController extends \BaseController{
 						$gl = $genledger_repo->create(array('entity' => $entity, 'module' => '1','reference' => \Input::get('invoice_no'), 'total_amount' => \Input::get('amount_request'),
 									'post_data' => $entries));
 
-						// if($gl){
-						// 	$subledger_repo = \App::make('Financials\SubLedger');
-						// 	$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => \Input::get('amount_request'),
-						// 			'debit' => 0, 'balance' =>  \Input::get('amount_request'), 'vendor' => $this->register->findByRegId(\Input::get('invoice_no'))->reference->supplier->supplier_name));
+						if($gl){
+							$subledger_repo = \App::make('Financials\SubLedger');
+							$sub_amt = $this->extractAP(\Input::only('account','account_amount'));
+							$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => $sub_amt,
+									'debit' => 0, 'balance' =>  $sub_amt, 'vendor' => $this->register->findByRegId(\Input::get('invoice_no'))->reference->supplier->supplier_name));
 
-						// }
+						}
 					}
 					$this->register->post(\Input::get('invoice_no'));
 					\DB::commit();
@@ -295,6 +296,26 @@ class APInvoiceController extends \BaseController{
 		// 	return \Response::json(array('status' => 'success', 'message' => 'Invoice Posted'));
 	
 		// return \Response::json($journal);
+	}
+
+	private function extractAP($data){
+		$header_account = \App::make('Financials\Coa')->findByName('Accounts Payable')->account_id;
+		$return_value = null;
+		$ctr = 0;
+		foreach (array_get($data, 'account') as $account) {
+			if($account == $header_account){
+				// $return_value = array('account_id' => $line['account_id'], 'amount' => $line['line_amount'],
+				// 	['description'] => 'N/A');
+				$return_value = $data['account_amount'][$ctr];
+
+				break;
+			}
+
+			$ctr ++;
+		}
+
+		return $return_value;
+
 	}
 
 	private function preparelines($accounts, $amounts){
@@ -376,34 +397,40 @@ class APInvoiceController extends \BaseController{
 		$total_debit = array();
 		$total_credit = array();
 		$post_action = array_get($input,'entry_type');
+		$accounts = array_get($input, 'account');
 
-		if(!in_array('0',$post_action))
+		if(count(array_unique($accounts)) == count($accounts)){
+			if(!in_array('0',$post_action))
 			return array('passed' => false,'message'=>"Debit account is required");
-		else if(!in_array('1', $post_action))
-			return array('passed' => false,'message'=>"Credit account is required");
-		else{
-			
-			$ctr = 0;
-			$actions = array_get($input, 'entry_type'); 
-
-			foreach (array_get($input, 'account_amount') as $amount) {
-				if($actions[$ctr] == 0)
-					array_push($total_debit, $amount);
-				else
-					array_push($total_credit, $amount);
-	
-				$ctr++;
-			}
-
-			if(array_sum($total_credit) == array_sum($total_debit)){
-				if(array_sum($total_credit) == $total)
-					return array('passed' => true,'message'=>"passed");
-				else
-					return array('passed' => false,'message'=>"Invoice amount did not match the total of accounts' amount");
-			}
-			else return array('passed' => false,'message'=>"total credit and debit amount must be equal");
+			else if(!in_array('1', $post_action))
+				return array('passed' => false,'message'=>"Credit account is required");
+			else{
 				
-		} 
+				$ctr = 0;
+				$actions = array_get($input, 'entry_type'); 
+
+				foreach (array_get($input, 'account_amount') as $amount) {
+					if($actions[$ctr] == 0)
+						array_push($total_debit, $amount);
+					else
+						array_push($total_credit, $amount);
+		
+					$ctr++;
+				}
+
+				if(array_sum($total_credit) == array_sum($total_debit)){
+					if(array_sum($total_credit) == $total)
+						return array('passed' => true,'message'=>"passed");
+					else
+						return array('passed' => false,'message'=>"Invoice amount did not match the total of accounts' amount");
+				}
+				else return array('passed' => false,'message'=>"total credit and debit amount must be equal");
+					
+			} 
+		}
+		else return array('passed' => false,'message'=>"duplicate coa account detected");
+
+		
 	}
 
 	public function list_aging(){

@@ -308,7 +308,7 @@ class CVController extends \BaseController{
 						if($gl){
 							$subledger_repo = \App::make('Financials\SubLedger');
 							$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => 0,
-									'debit' => \Input::get('amount_request'), 'balance' =>  0, 'vendor' =>  $this->cv->traceRecordObj(\Input::get('register_refno'))->rfp->register->reference->supplier->supplier_name));
+									'debit' => \Input::get('amount_request'), 'balance' =>  0, 'vendor' => \Input::get('payee_name')));//$this->cv->traceRecordObj(\Input::get('register_refno'))->rfp->register->reference->supplier->supplier_name));
 
 						}
 					}
@@ -316,7 +316,7 @@ class CVController extends \BaseController{
 					$register->post(\Input::get('invoice_no'));
 					\DB::commit();
 					$return_info['status'] = 'success';
-					$return_info['message'] = 'Posting Successful';
+					$return_info['message'] = $subl;//'Posting Successful';
 				}catch(\PDOException $e){
 					\DB::rollBack();
 					$return_info['status'] = 'success_failed';
@@ -364,12 +364,12 @@ class CVController extends \BaseController{
 						$gl = $genledger_repo->create(array('entity' => $entity, 'module' => '1','reference' => \Input::get('invoice_no'), 'total_amount' => \Input::get('amount_request'),
 									'post_data' => $entries));
 
-						// if($gl){
-						// 	$subledger_repo = \App::make('Financials\SubLedger');
-						// 	$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => \Input::get('amount_request'),
-						// 			'debit' => 0, 'balance' =>  \Input::get('amount_request'), 'vendor' => $this->register->findByRegId(\Input::get('invoice_no'))->reference->supplier->supplier_name));
+						if($gl){
+							$subledger_repo = \App::make('Financials\SubLedger');
+							$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => 0,
+									'debit' => \Input::get('amount_request'), 'balance' =>  0, 'vendor' => \Input::get('payee_name')));//$this->register->findByRegId(\Input::get('invoice_no'))->reference->supplier->supplier_name));
 
-						// }
+						}
 					}
 					$reg_repo->post(\Input::get('invoice_no'));
 					\DB::commit();
