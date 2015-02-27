@@ -16,7 +16,7 @@ class Purchases extends FinancialModel {
 					 'requestor_dept_det' => 'required',
 					 'po_fullyreceived' => 'required',
 					 'po_status' =>  'required',
-					 'approved_by' => 'required'
+					 'approved_by' => 'required',
 					 'po_remarks' => 'required',
 					 'cancelled' => 'required',
 					 'sync' => 'required',
