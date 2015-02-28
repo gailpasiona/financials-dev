@@ -93,6 +93,8 @@ class APInvoiceController extends \BaseController{
 			\DB::rollBack();
 			$return_info['status'] = 'success_failed';
 			$return_info['message'] = $e->getmessage();
+
+			return \Response::json($return_info);
 		}
 
 	}
