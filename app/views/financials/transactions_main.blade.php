@@ -134,6 +134,15 @@ $('#table-purchases').bootstrapTable({
                             //formatter: json2string,
                             sortable: false
                         },{
+                            field: 'approver',
+                            title: 'Approved By',
+                            align: 'left',
+                            valign: 'center',
+                            //valign: 'bottom',
+                            //width: 200/3,
+                            //formatter: json2string,
+                            sortable: false
+                        },{
                             field: 'id',
                             title: 'Action',
                             align: 'center',

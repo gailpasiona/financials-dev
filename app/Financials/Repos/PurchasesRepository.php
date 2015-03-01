@@ -101,7 +101,7 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 		$request = Purchases::find($record);
 		if($request->approved == '0'){
 			$request->approved = '1';
-			$request->approver = \Auth::user()->id;
+			$request->approver = \Auth::user()->username;
 			$request->approved_at = date("Y-m-d H:i:s");
 			// $request->register_date_posted = date("Y-m-d H:i:s");
 			return $this->update($request);
