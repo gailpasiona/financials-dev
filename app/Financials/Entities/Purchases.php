@@ -69,6 +69,10 @@ class Purchases extends FinancialModel {
 		return $query->where('invoiced', 'N');
 	}
 
+	public function scopeApproved($query,$status){
+		return $query->where('approved', $status);
+	}
+
 	public function scopeNoInvoice($query){
 		return $query->whereNotExists(function($query){
 			$this_table = DB::getTablePrefix() . $this->table; 

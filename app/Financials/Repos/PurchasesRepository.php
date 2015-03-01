@@ -11,7 +11,7 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 		// 	$query->select('id','supplier_name');
 		// }))->get();
 
-		return Purchases::company()->with(array('supplier' => function($query){
+		return Purchases::company()->approved('1')->with(array('supplier' => function($query){
 			$query->select('id','supplier_name');
 		}),'register')->whereHas('register', function($q){
 			$q->where('register_post','Y');
@@ -22,8 +22,14 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 		// }),'register')->get();
 	}
 
+	public function selectForApproval(){
+		return Purchases::company()->approved('0')->with(array('supplier' => function($query){
+			$query->select('id','supplier_name');
+		}),'register')->get();
+	}
+
 	public function selectAllNoInvoice(){//has('register','<',1)
-		return Purchases::company()->has('register','<',1)->with(array('supplier' => function($query){
+		return Purchases::company()->approved('1')->has('register','<',1)->with(array('supplier' => function($query){
 			$query->select('id','supplier_name');
 		}))->get();
 		// return Purchases::company()->whereHas('register', function ($q) {
@@ -54,8 +60,13 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 		return Purchases::find($id)->select();
 	}
 
+	private function entries_count(){
+		return \DB::table('PO_header')->count();
+	}
+
 	public function create($data){
 		$record = new Purchases;
+		$record->id = $this->entries_count() + 1;
 		$record->po_number = array_get($data, 'po_number');
         $record->po_total_amount = array_get($data, 'amount');
         $record->po_date = array_get($data, 'po_date');
@@ -86,6 +97,20 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 
 	}
 
+	public function approve($record){
+		$request = Purchases::find($record);
+		if($request->approved == '0'){
+			$request->approved = '1';
+			$request->approver = \Auth::user()->id;
+			$request->approved_at = date("Y-m-d H:i:s");
+			// $request->register_date_posted = date("Y-m-d H:i:s");
+			return $this->update($request);
+		}
+		else return false;
+		
+
+	}
+
 	public function save(Purchases $instance)
     {
         $entity = \Company::where('alias', \Session::get('company'))->first();
@@ -98,4 +123,9 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
   //       return $instance->save();
         //return $entity->invoices()->save($instance);
     }
+
+    public function update(Purchases $instance)
+    { 
+         return $instance->save();
+     }
 }

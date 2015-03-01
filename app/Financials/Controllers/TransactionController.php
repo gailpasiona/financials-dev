@@ -59,7 +59,7 @@ class TransactionController extends \BaseController{
 				
 					\DB::commit();
 					$return_info['status'] = 'success';
-					$return_info['message'] = 'Payable created!';
+					$return_info['message'] = 'Payable created, waiting for approval!';
 
 			}
 
@@ -75,6 +75,26 @@ class TransactionController extends \BaseController{
 		}
 
 		return \Response::json($return_info);
+	}
+
+	public function approval(){
+		$record = $this->purchases->find(\Input::get('reference'));
+		
+		$data['po_number'] = $record->id;
+		$data['payee'] = $record->supplier->supplier_name;
+		$data['amount'] = $record->po_total_amount;
+		$data['po_date'] = $record->po_date;
+		$data['title'] = 'Approve PO for Payment';
+
+		return \View::make('financials.modals.form_po_approve')->with('data', $data);
+	}
+
+	public function approve($record){
+		if($this->purchases->approve($record))
+			return \Response::json(array('status' => 'success', 'message' => 'Payable approved!'));
+		else
+			return \Response::json(array('status' => 'success_failed', 'message' => 'Approval failed!'));
+
 	}
 
 
@@ -102,7 +122,10 @@ class TransactionController extends \BaseController{
 
 	public function index_payables(){
 		//return \Response::json($this->rfp->selectAll());
-		return \View::make('financials.transactions_main')->with('user', \Confide::user()->username);
+		if(!\Entrust::can(\Request::segment(2) . '_approve_payable'))
+			return \View::make('financials.transactions_main')->with('user', \Confide::user()->username);
+		else
+			return \View::make('financials.transactions_main_approver')->with('user', \Confide::user()->username);
 					//->with('data', $this->purchases->selectAll());
 
 	}
@@ -110,6 +133,8 @@ class TransactionController extends \BaseController{
 		$type = \Input::get('type');
 		if($type == 'all') 
 			return \Response::json($this->purchases->selectAll());
+		else if($type == 'approval')
+			return \Response::json($this->purchases->selectForApproval());
 		else
 			return \Response::json($this->purchases->selectAllNoInvoice());
 		
