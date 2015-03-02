@@ -95,6 +95,7 @@ Route::group(['prefix' => 'financials/' . Request::segment(2)], function(){
 	Route::get('AP/create', 'Financials\Controllers\TransactionController@create');
 	Route::post('AP/save', 'Financials\Controllers\TransactionController@store');
 	Route::get('AP/approval', 'Financials\Controllers\TransactionController@approval');
+	Route::post('AP/request', 'Financials\Controllers\TransactionController@request');
 	Route::patch('AP/approve/{record}', 'Financials\Controllers\TransactionController@approve');
 	//Route::get('/', array('as' => 'user_dashboard', 'uses'=>'HomeController@show_user')); //to do check perms
 	Route::get('AP', 'Financials\Controllers\TransactionController@index_payables');

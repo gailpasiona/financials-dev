@@ -41,6 +41,7 @@
                   <select class="form-control" id="reload_type">
                             <option value="">For Invoicing </option>
                             <option value="all">w/ Posted Invoice </option>
+                            <option value="request">For Request </option>
                     </select>
                  <button type="button" class="btn btn-md btn-success" onclick="refreshTable();"><i class="fa fa-refresh fa-lg"></i>&nbsp;<strong>Refresh Table</strong></button>
                 </div>
@@ -158,19 +159,24 @@ function json2string(obj){
 function amountFormatter(value){
     return accounting.formatMoney(value,"Php ");
 }
-function useractionFormatter(value){
+function useractionFormatter(value,row){
     // return '<button type="button" class="btn btn-sm btn-warning syncBtn" onclick="invoice_action('+value+');"><strong>Invoice</strong></button>';
-    var url = 'AP/generate_invoice?reference=' + value;
-    return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Invoice</strong></a>';
+    var invoice_url = 'AP/generate_invoice?reference=' + value;
+    // var request_url = 'AP/request';
+    if(row.approved == '2')
+        return '<a class="btn btn-sm btn-warning" href="'+ invoice_url +'" data-toggle="modal" data-target="#modal_form"><strong>Invoice</strong></a>';
+    else if(row.approved == '0')
+         return '<button type="button" class="btn btn-sm btn-danger syncBtn" onclick="request_action('+value+');"><strong>Request</strong></button>';
+         //return '<a class="btn btn-sm btn-warning" href="'+ request_url +'" data-toggle="modal" data-target="#modal_form"><strong>Request</strong></a>';
 }
 function refreshTable(){
 	$('#table-purchases').bootstrapTable('refresh',{});
 }
-function invoice_action(value){
+function request_action(value){
     console.log(value);
    myApp.showPleaseWait();
     var request = $.ajax({
-            url: "AP/invoice/generate",
+            url: "AP/request",
             type: "POST",
             data: {reference: value}
             // dataType: "json"
@@ -180,13 +186,52 @@ function invoice_action(value){
         console.log(data);
         myApp.hidePleaseWait();
         $('.table').bootstrapTable('refresh');
+        show_message_in_parent(data);
     // $('#table-records').bootstrapTable('refresh',{url: 'bp_records'});
 
     });
     request.fail(function(jqXHR, textStatus){
         myApp.hidePleaseWait();
+
+        $("div").removeClass("has-error");
+        $( ".message_content" ).remove();//remove first if exists
+        
+        $(".messages").append('<div class="message_content alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert">\n\
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\n\
+            <strong>Transaction Failed!</strong> <br />Transaction failed! Please contact system administrator</div>');
+
+
     });
 }
+
+function show_message_in_parent(data){
+           // console.log(data);
+    $("div").removeClass("has-error");
+    $( ".message_content" ).remove();//remove first if exists
+    var prompt = "<br />";
+
+    if(data.status == 'success_error'){
+        $.each(data.message, function(key,value) {
+            prompt += value + "<br />";
+            $('.' + key).addClass("has-error");
+        });
+        $(".messages").append('<div class="message_content alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert">\n\
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\n\
+             <strong>Errors Occured!</strong> '+prompt+' </div>');
+        }
+    else if(data.status == 'success_failed'){
+         $(".messages").append('<div class="message_content alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert">\n\
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\n\
+            <strong>Transaction Failed!</strong> <br />'+data.message+' </div>');
+    }
+    else{
+        $(".messages").append('<div class="message_content alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert">\n\
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\n\
+            <strong>Transaction Succeeded!</strong> <br />'+data.message+' </div>');
+    }
+             
+}
+
 
 $('.modal').on('hidden.bs.modal', function () {
  $(this).removeData('bs.modal');

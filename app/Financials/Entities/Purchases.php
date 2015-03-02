@@ -44,7 +44,7 @@ class Purchases extends FinancialModel {
  
         // static::updating(function($record)
         // {
-        //     $record->last_updated_by = \Auth::user()->id;
+        //     //$record->last_updated_by = \Auth::user()->id;
         // });
     }
 

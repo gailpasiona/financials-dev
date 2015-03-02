@@ -23,13 +23,22 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 	}
 
 	public function selectForApproval(){
-		return Purchases::company()->approved('0')->with(array('supplier' => function($query){
+		return Purchases::company()->approved('1')->with(array('supplier' => function($query){
 			$query->select('id','supplier_name');
 		}),'register')->get();
 	}
 
 	public function selectAllNoInvoice(){//has('register','<',1)
-		return Purchases::company()->approved('1')->has('register','<',1)->with(array('supplier' => function($query){
+		return Purchases::company()->approved('2')->has('register','<',1)->with(array('supplier' => function($query){
+			$query->select('id','supplier_name');
+		}))->get();
+		// return Purchases::company()->whereHas('register', function ($q) {
+	 //    		$q->where('register_post', '=', 'Y');  
+		// });
+	}
+
+	public function selectAllForRequest(){//has('register','<',1)
+		return Purchases::company()->approved('0')->has('register','<',1)->with(array('supplier' => function($query){
 			$query->select('id','supplier_name');
 		}))->get();
 		// return Purchases::company()->whereHas('register', function ($q) {
@@ -98,18 +107,33 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 	}
 
 	public function approve($record){
-		$request = Purchases::find($record);
-		if($request->approved == '0'){
-			$request->approved = '1';
-			$request->approver = \Auth::user()->username;
-			$request->approved_at = date("Y-m-d H:i:s");
-			// $request->register_date_posted = date("Y-m-d H:i:s");
-			return $this->update($request);
+		$request = Purchases::company()->find($record);
+		if($request->approved == '1'){
+			$data = array('data'=>array('approved' => '2', 'approver' => \Auth::user()->username, 'approved_at' => date("Y-m-d H:i:s")),
+							'company' => \Company::where('alias', \Session::get('company'))->first()->id, 'id' => $record);
+			return $this->update($data);
 		}
 		else return false;
 		
-
 	}
+
+	public function request($record){
+
+		$request = Purchases::company()->find($record);//$this->find($rec);
+
+		if($request->approved == '0'){
+			$data = array('data'=>array('approved' => '1', 'approver' => \Auth::user()->username, 'approved_at' => date("Y-m-d H:i:s")),
+							'company' => \Company::where('alias', \Session::get('company'))->first()->id, 'id' => $record);
+			
+			return $this->update($data);//last(\DB::getQueryLog());
+		}
+
+		else return false;
+		
+		// return $request;
+	}
+
+
 
 	public function save(Purchases $instance)
     {
@@ -124,8 +148,11 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
         //return $entity->invoices()->save($instance);
     }
 
-    public function update(Purchases $instance)
+    public function update($instance)
     { 
-         return $instance->save();
+         // return $instance->save();
+         return Purchases::where('id', $instance['id'])->where('company_id', $instance['company'])->update($instance['data']);
+
+
      }
 }

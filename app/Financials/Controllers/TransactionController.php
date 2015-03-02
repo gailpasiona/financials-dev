@@ -77,6 +77,15 @@ class TransactionController extends \BaseController{
 		return \Response::json($return_info);
 	}
 
+	public function request(){
+		if($this->purchases->request(\Input::get('reference')))
+			return \Response::json(array('status' => 'success', 'message' => 'Payable request sent!'));
+		else
+			return \Response::json(array('status' => 'success_failed', 'message' => 'Request failed!'));
+		// return \Response::json($this->purchases->request(\Input::get('reference')));
+
+	}
+
 	public function approval(){
 		$record = $this->purchases->find(\Input::get('reference'));
 		
@@ -135,6 +144,8 @@ class TransactionController extends \BaseController{
 			return \Response::json($this->purchases->selectAll());
 		else if($type == 'approval')
 			return \Response::json($this->purchases->selectForApproval());
+		else if($type == 'request')
+			return \Response::json($this->purchases->selectAllForRequest());
 		else
 			return \Response::json($this->purchases->selectAllNoInvoice());
 		
