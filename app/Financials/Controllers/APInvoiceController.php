@@ -221,7 +221,7 @@ class APInvoiceController extends \BaseController{
 
 		$register_info = array();
 
-		$register_info['coa_list'] = $coa_repo->getAccountsBySub(array('3','4','5','6','7'));
+		$register_info['coa_list'] = $coa_repo->selectAll();//getAccountsBySub(array('3','4','5','6','7'));
 		$register_info['invoice'] = $data[0]['register_id'];
 		$register_info['amount'] = $data[0]['account_value'];
 		$register_info['payee'] = $data[0]['reference']['supplier']['supplier_name'];
