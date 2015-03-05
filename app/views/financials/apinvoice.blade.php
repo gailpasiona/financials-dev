@@ -159,7 +159,7 @@ function useractionFormatter(value,row){
 
         else{
             url = "rfp/create?invoice=" + encodeURIComponent(value);
-            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Request Payment</strong></a>';
+            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Submit</strong></a>';
         }
         
     }

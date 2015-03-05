@@ -65,7 +65,7 @@ class RfpRepository implements RfpRepositoryInterface {
 	public function create($data){
 		$rfp = new Rfp;
 
-		$rfp->rfp_number = 'RFP ' . \Helpers::recordNumGen($this->entries_count() + 1);//array_get($data,'ref') . "-" . ($this->entries_count() + 1);
+		$rfp->rfp_number = 'ACC ' . \Helpers::recordNumGen($this->entries_count() + 1);//array_get($data,'ref') . "-" . ($this->entries_count() + 1);
 		$rfp->costing_department = array_get($data,'cost_dept');;
 		$rfp->date_needed = array_get($data,'date_needed');;
 		$rfp->amount_requested = array_get($data,'amount_request');
@@ -105,7 +105,7 @@ class RfpRepository implements RfpRepositoryInterface {
 	        else return array('saved' => 0, 'object' => $filter->messages());
 			
 		}
-		else return array('saved' => -1 , 'object' => 'Cannot modify approved RFP');;
+		else return array('saved' => -1 , 'object' => 'Cannot modify approved Record');;
 	}
 
 	public function approve($ref){

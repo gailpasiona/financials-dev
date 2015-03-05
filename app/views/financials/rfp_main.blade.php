@@ -14,7 +14,7 @@
       <div class="col-md-12">
          <div class="messages"></div>
           <div class="panel panel-default">
-            <div class="panel-heading"><i class="fa fa-credit-card fa-md"></i> <strong>Payment Requests</strong></div>
+            <div class="panel-heading"><i class="fa fa-credit-card fa-md"></i> <strong> Accounting Approval</strong></div>
            
                  <div class="panel-table"><table id="table-rfp" class="table"></table></div>
             
@@ -92,7 +92,7 @@ $('#table-rfp').bootstrapTable({
                         pagination: true,
                         columns: [{
                             field: 'rfp_number',
-                            title: 'RFP No',
+                            title: 'Doc No',
                             align: 'left',
                             valign: 'center',
                             sortable: true,
@@ -181,7 +181,7 @@ function useractionFormatter(value,row){
 
         // else{data-toggle="modal" data-target="#modal_form"
             url = "cv/create?rfp=" + encodeURIComponent(value);
-            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Create Cheque Request<strong></a>';
+            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Create Cheque Voucher<strong></a>';
         // }
         
     }
@@ -189,7 +189,7 @@ function useractionFormatter(value,row){
         url = 'rfp/' + encodeURIComponent(value) + '/edit';
         // return '<a class="btn btn-sm btn-success" href="'+ url +'">Post Invoice</a>';
         return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Edit</strong></a>&nbsp;' + 
-                 '<button type="button" class="btn btn-sm btn-default btn-approval" onclick="invoice_action(\'' + value + '\');"><strong>Approve Request</strong></button>';
+                 '<button type="button" class="btn btn-sm btn-default btn-approval" onclick="invoice_action(\'' + value + '\');"><strong>Approve</strong></button>';
     }
         
 }

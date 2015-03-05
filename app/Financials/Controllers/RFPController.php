@@ -48,7 +48,7 @@ class RFPController extends \BaseController{
 		$register_info['amount_request'] = $this->extractAP($data[0]['lines']);//$data[0]['account_value'];
 		$register_info['payee_name'] = $data[0]['reference']['supplier']['supplier_name'];
 		$register_info['payee_address'] = $data[0]['reference']['supplier']['address'];
-		$register_info['title'] = "Create RFP for Invoice " . $data[0]['register_id'];
+		$register_info['title'] = "Create Request for Invoice " . $data[0]['register_id'];
 
 		return \View::make('financials.modals.form_rfp')->with('data',$register_info);
 	}
@@ -68,7 +68,7 @@ class RFPController extends \BaseController{
 
 			if($request['saved']){
 					// $sdd = $repo->updateById(\Input::get('reference'));
-					return \Response::json(array('status' => 'success', 'message' => 'RFP Created'));
+					return \Response::json(array('status' => 'success', 'message' => 'Record Created'));
 			}
 			else{
 				return \Response::json(array('status' => 'success_error', 'message' => $request['object']));;
@@ -78,7 +78,7 @@ class RFPController extends \BaseController{
 
 		else{
 			//return \Response::json(array('not yet rfp'));
-			return \Response::json(array('status' => 'success_restrict', 'message' => 'Unable to create RFP, this invoice already have RFP'));
+			return \Response::json(array('status' => 'success_restrict', 'message' => 'Unable to create record, this invoice already have pending request'));
 		}
 	}
 
@@ -100,7 +100,7 @@ class RFPController extends \BaseController{
 		$rfp['description'] = $data[0]['request_description'];
 		$rfp['payee_name'] = $data[0]['register']['reference']['supplier']['supplier_name'];
 		$rfp['payee_address'] = $data[0]['register']['reference']['supplier']['address'];
-		$rfp['title'] = "Modify RFP " . $data[0]['rfp_number'];
+		$rfp['title'] = "Modify Record " . $data[0]['rfp_number'];
 
 		return \View::make('financials.modals.form_rfp')->with('data',$rfp);
 
@@ -113,7 +113,7 @@ class RFPController extends \BaseController{
 		$record = $this->rfp->modify($record,\Input::all());
 		
 		if($record['saved'] > 0)
-			return \Response::json(array('status' => 'success', 'message' => 'RFP update completed'));
+			return \Response::json(array('status' => 'success', 'message' => 'Record update completed'));
 
 		else if($record['saved'] == 0)
 			return \Response::json(array('status' => 'success_error', 'message' => $record['object']));
@@ -143,8 +143,8 @@ class RFPController extends \BaseController{
 	}
 
 	public function approve(){
-		if($this->rfp->approve(\Input::get('rfp'))) return \Response::json(array('status' => 'success', 'message' => 'RFP approved!'));
+		if($this->rfp->approve(\Input::get('rfp'))) return \Response::json(array('status' => 'success', 'message' => 'Record approved!'));
 
-		else return \Response::json(array('status' => 'success_failed', 'message' => 'RFP approval Failed'));
+		else return \Response::json(array('status' => 'success_failed', 'message' => 'Record approval Failed'));
 	}
 }
