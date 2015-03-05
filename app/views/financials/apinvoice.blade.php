@@ -154,7 +154,7 @@ function useractionFormatter(value,row){
     // console.log(value, row.rfp);
     if(row.register_post == 'Y'){
         if(row.rfp){
-            return '<strong>Payment Requested</strong>';
+            return '<strong>Submitted</strong>';
         }
 
         else{
