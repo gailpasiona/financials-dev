@@ -182,7 +182,7 @@ class APInvoiceController extends \BaseController{
 		$register_info['amount_request'] = $payable['po_total_amount'];
 		$register_info['payee_name'] = $payable['supplier']['supplier_name'];
 		$register_info['po_reference'] = $payable['po_number'];
-		$register_info['title'] = "Create Invoice";
+		$register_info['title'] = "Create AP Voucher";
 
 		return \View::make('financials.modals.form_invoice')->with('data',$register_info);
 
@@ -226,7 +226,7 @@ class APInvoiceController extends \BaseController{
 		$register_info['amount'] = $data[0]['account_value'];
 		$register_info['payee'] = $data[0]['reference']['supplier']['supplier_name'];
 		$register_info['refno'] = $data[0]['register_refno'];
-		$register_info['title'] = "Post Invoice " . $data[0]['register_id'];
+		$register_info['title'] = $data[0]['register_id'];
 		$register_info['lines'] = $data[0]['lines'];
 
 		return \View::make('financials.modals.form_post')->with('data',$register_info);

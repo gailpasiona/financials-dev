@@ -6,13 +6,13 @@ class Rfp extends FinancialModel {
     public static $rules = array(
         'entry' => [
                      'costing_department'  => 'required',
-                     'date_needed' => 'required|date',
+                     // 'date_needed' => 'required|date',
                      'amount_requested'  =>  'amount',
                      'request_description' => 'required'
         ],
         'approval' => [
                      'costing_department'  => 'required',
-                     'date_needed' => 'required|date',
+                     // 'date_needed' => 'required|date',
                      'amount_requested'  =>  'amount',
                      'request_description' => 'required'
         ]

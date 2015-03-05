@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                               <!--  <div class="form-group row">
                                     <label for="payee_address" class="col-md-4 control-label">Payee Address</label>
                                     <div class="col-md-6">
                                       @if(!isset($data['payee_address']))
@@ -70,15 +70,15 @@
                                         <input class="form-control" placeholder="Payee Address" type="text" readonly = "readonly" name="payee_address" id="payee_address" value="{{{$data['payee_address']}}}">
                                       @endif
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group row">
                                     <label for="description" class="col-md-4 control-label">Remarks</label>
                                     <div class="col-md-6">
                                       @if(!isset($data['description']))
-                                        <input class="form-control" placeholder="Description" type="text" name="description" id="description" value="">
+                                        <input class="form-control" placeholder="Remarks" type="text" name="description" id="description" value="">
                                       @else
-                                        <input class="form-control" placeholder="Description" type="text" name="description" id="description" value="{{{$data['description']}}}">
+                                        <input class="form-control" placeholder="Remarks" type="text" name="description" id="description" value="{{{$data['description']}}}">
                                       @endif
                                     </div>
                                 </div>

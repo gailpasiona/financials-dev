@@ -38,9 +38,9 @@
                 <!-- <label class="control-label">Reload Table:</label> -->
                 <div class="controls">
                   <select class="form-control" id="reload_type">
-                            <option value="">Posted Invoices </option>
-                            <option value="open">Open Invoices </option>
-                            <option value="all">All Invoices </option>
+                            <option value="">Validated APVs </option>
+                            <option value="open">Open APV </option>
+                            <!-- <option value="all">All  </option> -->
                     </select>
                  <button type="button" class="btn btn-md btn-success" onclick="refreshTable();"><i class="fa fa-refresh fa-lg"></i>&nbsp;<strong>Refresh Table</strong></button>
                 </div>
@@ -159,7 +159,7 @@ function useractionFormatter(value,row){
 
         else{
             url = "rfp/create?invoice=" + encodeURIComponent(value);
-            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Submit</strong></a>';
+            return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Submit to Treasury</strong></a>';
         }
         
     }

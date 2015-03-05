@@ -29,7 +29,7 @@
 						<ul class="dropdown-menu">
 				            <li><a href="{{{ action('Financials\Controllers\TransactionController@index_payables') }}}">Payables</a></li>
 				            <li><a href="{{{ action('Financials\Controllers\APInvoiceController@index') }}}">AP Vouchers</a></li>
-				            <li><a href="{{{ action('Financials\Controllers\RFPController@index') }}}">Accounting Approval</a></li>
+				            <li><a href="{{{ action('Financials\Controllers\RFPController@index') }}}">Treasury</a></li>
 				            <li><a href="{{{ action('Financials\Controllers\CVController@index') }}}">Cheque Vouchers</a></li>
 				          </ul>	   				
 					</li>

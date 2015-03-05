@@ -48,7 +48,7 @@ class RFPController extends \BaseController{
 		$register_info['amount_request'] = $this->extractAP($data[0]['lines']);//$data[0]['account_value'];
 		$register_info['payee_name'] = $data[0]['reference']['supplier']['supplier_name'];
 		$register_info['payee_address'] = $data[0]['reference']['supplier']['address'];
-		$register_info['title'] = "Create Request for Invoice " . $data[0]['register_id'];
+		$register_info['title'] = "Submit " . $data[0]['register_id'];
 
 		return \View::make('financials.modals.form_rfp')->with('data',$register_info);
 	}

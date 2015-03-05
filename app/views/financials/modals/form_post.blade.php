@@ -5,7 +5,6 @@
           <h4 class="modal-title" id="myModalLabel">{{{$data['title']}}}</h4>
       </div>
       <div class="modal-body">
-        
             <div class="messages"> </div>
                 <form class="form-horizontal" id="postingform" role="form" method="POST" accept-charset="UTF-8">
 	                <fieldset>
@@ -137,7 +136,7 @@
    </div>
 </div>
 
-<script src="{{ URL::asset('js/dyn_fields.js')}}"></script>
+<!-- <script src="{{ URL::asset('js/dyn_fields.js')}}"></script> -->
 
 <script type="text/javascript">
 $("#submitBtn").click(function(e){
