@@ -32,9 +32,9 @@
                                     <label for="date_needed" class="col-md-4 control-label">Date Needed</label>
                                     <div class="col-md-6">
                                       @if(!isset($data['date_needed']))
-                                        <input class="form-control datepicker" placeholder="Date Needed" type="text" readonly="readonly" name="date_needed" id="date_needed" value="">
+                                        <input class="form-control" placeholder="Date Needed" readonly="readonly" type="text" readonly="readonly" name="date_needed" id="date_needed" value="">
                                       @else
-                                        <input class="form-control datepicker" placeholder="Date Needed" type="text" readonly="readonly" name="date_needed" id="date_needed" value="{{{$data['date_needed']}}}">
+                                        <input class="form-control" placeholder="Date Needed" readonly="readonly" type="text" readonly="readonly" name="date_needed" id="date_needed" value="{{{$data['date_needed']}}}">
                                       @endif
                                     </div>
                                 </div>

@@ -18,7 +18,7 @@ class TransactionController extends \BaseController{
 		$repo = \App::make('Financials\Supplier');
 		
 		$data['payee'] = $repo->selectAll();
-		$data['title'] = 'Create Supplier Invoice';
+		$data['title'] = 'Create Payable';
 
 		return \View::make('financials.modals.form_po')->with('data', $data);
 	}
@@ -77,11 +77,43 @@ class TransactionController extends \BaseController{
 		return \Response::json($return_info);
 	}
 
+	public function requesting(){
+		$record = $this->purchases->find(\Input::get('reference'));
+		
+		$data['po_number'] = $record->id;
+		$data['payee'] = $record->supplier->supplier_name;
+		$data['amount'] = $record->po_total_amount;
+		$data['po_date'] = $record->po_date;
+		$data['title'] = 'Request Payment';
+
+		return \View::make('financials.modals.form_po_request')->with('data', $data);
+	}
+
 	public function request(){
-		if($this->purchases->request(\Input::get('reference')))
-			return \Response::json(array('status' => 'success', 'message' => 'Payable request sent!'));
-		else
+
+		try{
+
+			\DB::beginTransaction();
+
+			$challenge = $this->purchases->validate_request(array('input' => \Input::only('date_needed','refno'),'trans_type' => 'request'));
+
+			if($challenge['passed']){
+				if($this->purchases->request(\Input::only('po_number','date_needed','refno'))){
+					\DB::commit();
+					return \Response::json(array('status' => 'success', 'message' => 'Payable request sent!'));
+				}
+				else
+					return \Response::json(array('status' => 'success_failed', 'message' => 'Request failed!'));
+			}
+			else return \Response::json(array('status' => 'success_error', 'message' => $challenge['object']));
+
+		}catch(\Exception $e){
+			\DB::rollBack();
 			return \Response::json(array('status' => 'success_failed', 'message' => 'Request failed!'));
+		}
+
+		
+		
 		// return \Response::json($this->purchases->request(\Input::get('reference')));
 
 	}
@@ -93,7 +125,7 @@ class TransactionController extends \BaseController{
 		$data['payee'] = $record->supplier->supplier_name;
 		$data['amount'] = $record->po_total_amount;
 		$data['po_date'] = $record->po_date;
-		$data['title'] = 'Approve PO for Payment';
+		$data['title'] = 'Approve Request for Payment';
 
 		return \View::make('financials.modals.form_po_approve')->with('data', $data);
 	}

@@ -106,6 +106,19 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 
 	}
 
+	public function validate_request($data){
+		$subject = new Purchases;
+		$subject->date_needed = $data['input']['date_needed'];
+		$subject->reference_no = $data['input']['refno'];
+
+		$filter = Purchases::validate($subject->toArray(), $data['trans_type']);
+
+		if(!$filter->passes())
+			return array('passed' => false , 'object' => $filter->messages());
+		else
+			return array('passed' => true , 'object' => $subject);
+	}
+
 	public function approve($record){
 		$request = Purchases::company()->find($record);
 		if($request->approved == '1'){
@@ -119,11 +132,15 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 
 	public function request($record){
 
-		$request = Purchases::company()->find($record);//$this->find($rec);
+		$request = Purchases::company()->find($record['po_number']);//$this->find($rec);
 
 		if($request->approved == '0'){
-			$data = array('data'=>array('approved' => '1', 'approver' => \Auth::user()->username, 'approved_at' => date("Y-m-d H:i:s")),
-							'company' => \Company::where('alias', \Session::get('company'))->first()->id, 'id' => $record);
+			// $data = array('data'=>array('approved' => '1', 'approver' => \Auth::user()->username, 'approved_at' => date("Y-m-d H:i:s")),
+			// 				'company' => \Company::where('alias', \Session::get('company'))->first()->id, 'id' => $record);
+
+			$data = array('data'=>array('approved' => '1', 'approver' => \Auth::user()->username, 'approved_at' => date("Y-m-d H:i:s"),
+							'payment_date_needed' => $record['date_needed'],'reference_no' => $record['refno']),
+							'id' => $record['po_number']);
 			
 			return $this->update($data);//last(\DB::getQueryLog());
 		}
@@ -151,7 +168,10 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
     public function update($instance)
     { 
          // return $instance->save();
-         return Purchases::where('id', $instance['id'])->where('company_id', $instance['company'])->update($instance['data']);
+         // return Purchases::where('id', $instance['id'])->where('company_id', $instance['company'])->update($instance['data']);
+    	$context = \Company::where('alias', \Session::get('company'))->first()->id;
+
+    	return Purchases::where('id', $instance['id'])->where('company_id', $context)->update($instance['data']);
 
 
      }

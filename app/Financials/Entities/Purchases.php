@@ -21,6 +21,10 @@ class Purchases extends FinancialModel {
 					 'cancelled' => 'required',
 					 'invoiced' => 'required'
 
+        ],
+        'request' => [
+        				'date_needed' => 'required|date',
+        				'reference_no' => 'required'
         ]
     );
 

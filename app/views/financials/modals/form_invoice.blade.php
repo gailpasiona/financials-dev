@@ -61,9 +61,9 @@
                                     <label for="register_refno" class="col-md-4 control-label">Invoice Reference</label>
                                     <div class="col-md-6">
                                       @if(!isset($data['register_refno']))
-                                        <input class="form-control editable" placeholder="Invoice Reference" type="text" name="register_refno" id="payee_name" value="">
+                                        <input class="form-control editable" readonly="readonly" placeholder="Invoice Reference" type="text" name="register_refno" id="payee_name" value="{{{$data['billing_reference']}}}">
                                       @else
-                                        <input class="form-control editable" placeholder="Invoice Reference" type="text" name="register_refno" id="payee_name" value="{{{$data['register_refno']}}}">
+                                        <input class="form-control editable" readonly="readonly" placeholder="Invoice Reference" type="text" name="register_refno" id="payee_name" value="{{{$data['register_refno']}}}">
                                       @endif
                                     </div>
                                 </div>

@@ -89,9 +89,7 @@ class Register extends FinancialModel {
 
     }
 
-
-
-	public static function boot()
+    public static function boot()
     {
         parent::boot();
  
@@ -112,7 +110,7 @@ class Register extends FinancialModel {
 	}
 
 	public function reference(){
-		$showable_fields = array('id','requestor','po_number','po_remarks','po_total_amount','supplier_id');
+		$showable_fields = array('id','requestor','po_number','po_remarks','po_total_amount','supplier_id','payment_date_needed','reference_no');
 		return $this->belongsTo('Financials\Entities\Purchases', 'po_id')->company()->select($showable_fields);
 	}
 

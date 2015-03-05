@@ -44,6 +44,7 @@ class RFPController extends \BaseController{
 		$register_info = array();
 
 		$register_info['cost_dept'] = $data[0]['reference']['requestor'];
+		$register_info['date_needed'] = $data[0]['reference']['payment_date_needed'];
 		$register_info['invoice_ref'] = $data[0]['register_id'];
 		$register_info['amount_request'] = $this->extractAP($data[0]['lines']);//$data[0]['account_value'];
 		$register_info['payee_name'] = $data[0]['reference']['supplier']['supplier_name'];
@@ -68,7 +69,7 @@ class RFPController extends \BaseController{
 
 			if($request['saved']){
 					// $sdd = $repo->updateById(\Input::get('reference'));
-					return \Response::json(array('status' => 'success', 'message' => 'Record Created'));
+					return \Response::json(array('status' => 'success', 'message' => 'Record Submitted'));
 			}
 			else{
 				return \Response::json(array('status' => 'success_error', 'message' => $request['object']));;
@@ -78,7 +79,7 @@ class RFPController extends \BaseController{
 
 		else{
 			//return \Response::json(array('not yet rfp'));
-			return \Response::json(array('status' => 'success_restrict', 'message' => 'Unable to create record, this invoice already have pending request'));
+			return \Response::json(array('status' => 'success_restrict', 'message' => 'Unable to process record, this invoice is already submitted'));
 		}
 	}
 

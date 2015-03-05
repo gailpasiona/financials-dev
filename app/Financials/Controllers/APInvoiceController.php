@@ -182,6 +182,7 @@ class APInvoiceController extends \BaseController{
 		$register_info['amount_request'] = $payable['po_total_amount'];
 		$register_info['payee_name'] = $payable['supplier']['supplier_name'];
 		$register_info['po_reference'] = $payable['po_number'];
+		$register_info['billing_reference'] = $payable['reference_no'];
 		$register_info['title'] = "Create AP Voucher";
 
 		return \View::make('financials.modals.form_invoice')->with('data',$register_info);

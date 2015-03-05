@@ -11,6 +11,16 @@
                     <fieldset>
                         <div id="voucher_info" class="form-group">
                             <div class="col-md-12">
+                               <div class="form-group row">
+                                    <label for="payee_name" class="col-md-4 control-label">Date Needed</label>
+                                    <div class="col-md-6">
+                                     @if(!isset($data['date_needed']))
+                                        <input disabled class="form-control" placeholder="Date Needed" type="text" readonly="readonly" name="invoice_date" id="invoice_date" value="">
+                                      @else
+                                        <input disabled class="form-control" placeholder="Date Needed" type="text" readonly="readonly" name="invoice_date" id="invoice_date" value="{{{$data['date_needed']}}}">
+                                      @endif
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                   @if(isset($data['rfp_number']))
                                     <input class="form-control" type="hidden" name="rfp_number" id="rfp_number" value="{{{$data['rfp_number']}}}">

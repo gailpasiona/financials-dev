@@ -31,6 +31,7 @@ class CVController extends \BaseController{
 		$data_needed['rfp_number'] = $data[0]['rfp_number'];
 		$data_needed['amount_requested'] = $data[0]['amount_requested'];
 		$data_needed['supplier'] = $data[0]['register']['reference']['supplier']['supplier_name'];
+		$data_needed['date_needed'] = $data[0]['register']['reference']['payment_date_needed'];
 
 		$data_needed['title'] = "Create Cheque Voucher";//for " . $data[0]['rfp_number'];
 
@@ -89,6 +90,7 @@ class CVController extends \BaseController{
 		$cv['amount_requested'] = $data[0]['amount'];
 		$cv['description'] = $data[0]['description'];
 		$cv['supplier'] = $data[0]['rfp']['register']['reference']['supplier']['supplier_name'];
+		$cv['date_needed'] = $data[0]['rfp']['register']['reference']['payment_date_needed'];
 		//$cv['cheque_number'] = $data[0]['cheque_number'];
 		$cv['title'] = "Modify CV " . $data[0]['cv_number'];
 

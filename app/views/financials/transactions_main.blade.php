@@ -162,12 +162,12 @@ function amountFormatter(value){
 function useractionFormatter(value,row){
     // return '<button type="button" class="btn btn-sm btn-warning syncBtn" onclick="invoice_action('+value+');"><strong>Invoice</strong></button>';
     var invoice_url = 'AP/generate_invoice?reference=' + value;
-    // var request_url = 'AP/request';
+    var request_url = 'AP/requesting?reference=' + value;
     if(row.approved == '2')
         return '<a class="btn btn-sm btn-warning" href="'+ invoice_url +'" data-toggle="modal" data-target="#modal_form"><strong>Create APV</strong></a>';
     else if(row.approved == '0')
-         return '<button type="button" class="btn btn-sm btn-danger syncBtn" onclick="request_action('+value+');"><strong>Request</strong></button>';
-         //return '<a class="btn btn-sm btn-warning" href="'+ request_url +'" data-toggle="modal" data-target="#modal_form"><strong>Request</strong></a>';
+         // return '<button type="button" class="btn btn-sm btn-danger syncBtn" onclick="request_action('+value+');"><strong>Request</strong></button>';
+         return '<a class="btn btn-sm btn-danger" href="'+ request_url +'" data-toggle="modal" data-target="#modal_form"><strong>Request</strong></a>';
 }
 function refreshTable(){
 	$('#table-purchases').bootstrapTable('refresh',{});
