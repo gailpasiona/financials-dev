@@ -32,7 +32,7 @@ class CVController extends \BaseController{
 		$data_needed['amount_requested'] = $data[0]['amount_requested'];
 		$data_needed['supplier'] = $data[0]['register']['reference']['supplier']['supplier_name'];
 
-		$data_needed['title'] = "Create Cheque Voucher for " . $data[0]['rfp_number'];
+		$data_needed['title'] = "Create Cheque Voucher";//for " . $data[0]['rfp_number'];
 
 		return \View::make('financials.modals.form_cv')->with('data',$data_needed);
 

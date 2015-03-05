@@ -17,7 +17,7 @@
                                   @else
                                     <input class="form-control" type="hidden" name="rfp_number" id="rfp_number" value="{{{$data['rfp_number']}}}">
                                   @endif
-                                    <label for="cost_dept" class="col-md-4 control-label">Cost Departm  ent</label>
+                                    <label for="cost_dept" class="col-md-4 control-label">Cost Department</label>
                                     <div class="col-md-6">
                                         @if(!isset($data['cost_dept']))
                                           <input class="form-control" placeholder="Cost Department" type="text" readonly = "readonly" name="cost_dept" id="cost_dept" value="">
@@ -73,7 +73,7 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="description" class="col-md-4 control-label">Description</label>
+                                    <label for="description" class="col-md-4 control-label">Remarks</label>
                                     <div class="col-md-6">
                                       @if(!isset($data['description']))
                                         <input class="form-control" placeholder="Description" type="text" name="description" id="description" value="">

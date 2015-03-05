@@ -164,7 +164,7 @@ function useractionFormatter(value,row){
     var invoice_url = 'AP/generate_invoice?reference=' + value;
     // var request_url = 'AP/request';
     if(row.approved == '2')
-        return '<a class="btn btn-sm btn-warning" href="'+ invoice_url +'" data-toggle="modal" data-target="#modal_form"><strong>Invoice</strong></a>';
+        return '<a class="btn btn-sm btn-warning" href="'+ invoice_url +'" data-toggle="modal" data-target="#modal_form"><strong>Create APV</strong></a>';
     else if(row.approved == '0')
          return '<button type="button" class="btn btn-sm btn-danger syncBtn" onclick="request_action('+value+');"><strong>Request</strong></button>';
          //return '<a class="btn btn-sm btn-warning" href="'+ request_url +'" data-toggle="modal" data-target="#modal_form"><strong>Request</strong></a>';
