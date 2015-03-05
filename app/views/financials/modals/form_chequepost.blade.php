@@ -33,14 +33,14 @@
                                     </div>
                                 </div>
 
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label for="register_refno" class="col-md-4 control-label">Register Reference</label>
                                     <div class="col-md-6">
                                      
                                         <input class="form-control" placeholder="Invoice Reference" type="text" readonly = "readonly" name="register_refno" id="payee_name" value="{{{$data['refno']}}}">
                                       
                                     </div>
-                    </div>
+                    </div> -->
 
                     <div class="form-group row">
                         <label for="payee_address" class="col-md-4 control-label">Cheque Number</label>
