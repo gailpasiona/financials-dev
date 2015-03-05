@@ -358,12 +358,12 @@ class CVController extends \BaseController{
 
 				   $entries =  $this->makeAccountingEntries(\Input::only('account','account_amount','entry_type'));
 
-				   $journal = $journal_repo->create(array('entity' => $entity,'module' => '1','reference' => \Input::get('invoice_no'), 'total_amount' => \Input::get('amount_request'),
+				   $journal = $journal_repo->create(array('entity' => $entity,'module' => '3','reference' => \Input::get('invoice_no'), 'total_amount' => \Input::get('amount_request'),
 								'post_data' => $entries));//$this->preparelines(\Input::get('account'), \Input::get('account_amount'))));
 					
 					if($journal){
 						$genledger_repo = \App::make('Financials\GenLedger');
-						$gl = $genledger_repo->create(array('entity' => $entity, 'module' => '1','reference' => \Input::get('invoice_no'), 'total_amount' => \Input::get('amount_request'),
+						$gl = $genledger_repo->create(array('entity' => $entity, 'module' => '3','reference' => \Input::get('invoice_no'), 'total_amount' => \Input::get('amount_request'),
 									'post_data' => $entries));
 
 						if($gl){
