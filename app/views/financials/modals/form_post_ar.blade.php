@@ -50,7 +50,18 @@
                                                           <input type="text" class="form-control" id="ref_no[]" name="ref_no[]" placeholder="Ref" value="{{{ $items['ref_no'] }}}">
                                                       </div>-->
                                                       <div class="col-md-12 lines">
-                                                          <div class="col-md-5 coa"><span class="col-md-1 control-label"></span>
+                                                        <div class="col-md-2"><span class="col-md-1 control-label"></span><select class="form-control" id="entry_type[]" name="entry_type[]">
+                                                              @if ($items['entry_type'] == 'D')
+                                                                <option value="0" selected="selected"> Debit</option>
+                                                                <option value="1"> Credit</option>
+                                                              @else
+                                                                <option value="0"> Debit</option>
+                                                                <option value="1" selected="selected"> Credit</option>
+                                                              @endif 
+                                                             
+                                                             </select>
+                                                          </div>
+                                                          <div class="col-md-4 coa"><span class="col-md-1 control-label"></span>
                                                             <select class="form-control acct_old" id="account[]" name="account[]">
                                                               @foreach($data['coa_list'] as $coa)
                                                                  @if ($items['account_id'] == $coa['account_id'])
@@ -62,9 +73,15 @@
                                                             </select>
                                                           </div>
                                                           <div class="col-md-2"><span class="col-md-1 control-label"></span>
-                                                            <input type="text" class="form-control" readonly = "readonly" id="account_amount[]" name="account_amount[]" placeholder="Amount" value="{{{$items['line_amount']}}}">
+                                                             <span class="col-md-1 control-label"></span>
+                                                            <div class="input-group">
+                                                              <span class="input-group-addon">
+                                                                <input type="radio" aria-label="..." name="subject_payment" value="{{{$items['line_no']}}}">
+                                                              </span>
+                                                              <input type="text" class="form-control" readonly = "readonly" id="account_amount[]" name="account_amount[]" placeholder="Amount" value="{{{$items['line_amount']}}}">
+                                                            </div>
                                                           </div>
-                                                          <div class="col-md-5"><span class="col-md-4 control-label"></span>
+                                                          <div class="col-md-4"><span class="col-md-4 control-label"></span>
                                                             <input type="text" class="form-control" readonly = "readonly" id="account_description[]" name="account_description[]" placeholder="Description" value="{{{$items['description']}}}">
                                                           </div>
                                                           <!--<div class="col-sm-1"> <span class="col-md-1 control-label"></span>

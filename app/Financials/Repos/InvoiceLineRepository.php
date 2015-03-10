@@ -63,5 +63,24 @@ class InvoiceLineRepository implements InvoiceLineRepositoryInterface {
 		return 1;
 	}
 
+	public function updateLines_receipt($data, $ref){
+		$item = InvoiceLine::where('register_id','=',$ref)->where('entry_type', '=', 'C')->first();
+		$item->account_id = $data;
+		$item->save();
+		return 1;
+	}
+
+	public function tagLine($line_number, $ref){
+		$item = InvoiceLine::where('register_id','=',$ref)->where('line_no', '=', $line_number)->first();
+
+		if($item){
+			$item->is_tagged_line = '1';
+			$item->save();
+
+			return $item->line_amount;
+		}
+		
+	}
+
 
 }

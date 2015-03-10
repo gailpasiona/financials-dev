@@ -36,15 +36,18 @@ class Register extends FinancialModel {
                      'po_id'  => 'required',
                      'invoice_date' => 'required|date',
                      'account_value' => 'required|amount',
-                     'account' => 'required',
-                     'account_amount' => 'required',
-                     'account_description' => 'required'
+                     'entry_type' => 'required',
+                     'line_account' => 'required',
+                     'line_amount' => 'required',
+                     'line_description' => 'required',
+                     'register_refno'  =>  'required'
         ],
         'receipt_entry' => [
                      'po_id'  => 'required',
                      'invoice_date' => 'required|date',
                      'account_value' => 'required|amount',
-                     'account_id' => 'required'
+                     'account_id' => 'required',
+                     'register_refno'  =>  'required'
         ]
     );
 

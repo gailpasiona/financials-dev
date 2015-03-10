@@ -104,6 +104,7 @@ Route::group(['prefix' => 'financials/' . Request::segment(2)], function(){
 	Route::resource('AP/invoice', 'Financials\Controllers\APInvoiceController');
 	Route::resource('Cashier/sales', 'Financials\Controllers\ARInvoiceController');
 	Route::resource('Cashier/receipts', 'Financials\Controllers\ARReceiptController');
+	Route::get('Cashier/receipts/post/{receipt}', 'Financials\Controllers\ARReceiptController@posting');
 	Route::post('Cashier/receipts/posting', 'Financials\Controllers\ARReceiptController@post');
 
 	Route::get('Cashier/receivables', array('as' => 'list_aging_invoice', 'uses' => 'Financials\Controllers\ARInvoiceController@list_receivables'));

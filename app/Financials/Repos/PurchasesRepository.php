@@ -11,7 +11,7 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 		// 	$query->select('id','supplier_name');
 		// }))->get();
 
-		return Purchases::company()->approved('1')->with(array('supplier' => function($query){
+		return Purchases::company()->approved('2')->with(array('supplier' => function($query){
 			$query->select('id','supplier_name');
 		}),'register')->whereHas('register', function($q){
 			$q->where('register_post','Y');

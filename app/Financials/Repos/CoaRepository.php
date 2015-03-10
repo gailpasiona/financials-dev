@@ -27,7 +27,7 @@ class CoaRepository implements CoaRepositoryInterface {
 	}
 
 	public function find($id){
-
+		return Coa::company()->find($id);
 	}
 
 	public function findByName($name){

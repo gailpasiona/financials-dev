@@ -44,8 +44,8 @@ class ARReceiptController extends \BaseController{
 		$coa_repo = \App::make('Financials\Coa');
 
 		$data['record'] = $this->register->getOpenReceiptRecord($record)->toArray()[0];
-		$data['coa'] = $coa_repo->getAccountsByGroup('1');
-		$data['title'] = 'Create Sales Receipt';
+		$data['coa'] = $coa_repo->selectAll();//getAccountsByGroup('1');
+		$data['title'] = 'Modify Sales Receipt';
 
 		return \View::make('financials.modals.form_sales_receipt')->with('data',$data);
 	}
@@ -55,26 +55,26 @@ class ARReceiptController extends \BaseController{
 
 		try{
 			\DB::beginTransaction();
-			$data = array('invoice_date' => \Input::get('receipt_date'), 'account' => \Input::get('account'));
+			$data = array('invoice_date' => \Input::get('receipt_date'), 'account' => \Input::get('account'), 'reference' => \Input::get('receipt_ref'));
 
 			$record = $this->register->modifyReceipt($invoice,$data);
 			
 			if($record['saved'] > 0){
-				// $lines_repo = \App::make('Financials\InvoiceLine');
+				$lines_repo = \App::make('Financials\InvoiceLine');
 
 				// $parsed_lines = $this->parse_lines(\Input::only('account_amount','account','account_description'));
 
-				// $lines = $lines_repo->updateLines($parsed_lines,$this->register->findByRegId($invoice)->id);
+				$lines = $lines_repo->updateLines_receipt(\Input::get('account'),$this->register->findByRegId($invoice)->id);
 
-				// if($lines){
+				if($lines){
 					\DB::commit();
 					$return_info['status'] = 'success';
 					$return_info['message'] = 'Invoice updated!';
-				// }
-				// else{
-				// 	$return_info['status'] = 'success_error';
-				// 	$return_info['message'] = 'Unable to complete transaction';
-				// }
+				}
+				else{
+					$return_info['status'] = 'success_error';
+					$return_info['message'] = 'Unable to complete transaction';
+				}
 
 			}
 				
@@ -102,26 +102,30 @@ class ARReceiptController extends \BaseController{
 	}
 
 	public function posting($invoice){
-		$repo = \App::make('Financials\Purchases');
-		$journal = $repo->find(\Input::get('reference'));
+		
+		// $repo = \App::make('Financials\Purchases');
+		// $journal = $repo->find(\Input::get('reference'));
 
 		$coa_repo = \App::make('Financials\Coa');
 
-		$data = $this->register->getOpenSIRecord($invoice);
+		//$data = $this->register->getOpenSIRecord($invoice);
+		$data['record'] = $this->register->getOpenReceiptRecord($invoice)->toArray()[0];
+		$data['coa'] = $coa_repo->selectAll();//getAccountsByGroup('1');
+		$data['title'] = 'Verify Sales Receipt';
 
-		$register_info = array();
-		$register_info['coa_list'] = $coa_repo->getAccountsByGroup('4');
+		// $register_info = array();
+		// $register_info['coa_list'] = $coa_repo->selectAll();//getAccountsByGroup('4');
 
-		$register_info['invoice'] = $data[0]['register_id'];
-		$register_info['amount'] = $data[0]['account_value'];
-		$register_info['payee'] = $data[0]['customer']['supplier_name'];
-		$register_info['lines'] = $data[0]['sales_lines'];
-		$register_info['title'] = "Complete Invoice " . $data[0]['register_id'];
+		// $register_info['invoice'] = $data[0]['register_id'];
+		// $register_info['amount'] = $data[0]['account_value'];
+		// $register_info['payee'] = $data[0]['customer']['supplier_name'];
+		// $register_info['lines'] = $data[0]['sales_lines'];
+		// $register_info['title'] = "Complete Invoice " . $data[0]['register_id'];
 
-		return \View::make('financials.modals.form_post_ar')->with('data',$register_info);
+		return \View::make('financials.modals.form_receipt_post')->with('data',$data);
 	}
 
-	public function post(){
+	public function post_old(){
 		$validate_record = $this->register->pre_posting_receipt(\Input::all());
 
 		if($validate_record['passed'] > 0){
@@ -148,7 +152,7 @@ class ARReceiptController extends \BaseController{
 
 						// }
 					}
-					$this->register->post(\Input::get('receipt_no'));
+					$this->register->post(\Input::only('receipt_no'));
 					\DB::commit();
 					$return_info['status'] = 'success';
 					$return_info['message'] = 'Posting Successful';
@@ -174,6 +178,67 @@ class ARReceiptController extends \BaseController{
 				
 	}
 
+	public function post(){
+		$validate_record = $this->register->pre_posting_receipt(\Input::get('receipt_no'));
+
+		if($validate_record['passed'] > 0){
+			$post_check = $this->prePostCheck(\Input::only('account'));
+			if($post_check['passed']){
+				$return_info = array('status' => null, 'message' => null);
+				try{
+					\DB::beginTransaction();
+					// $header_account = \App::make('Financials\Coa')->findByName('Accounts Receivable');
+				    $entity = \Company::where('alias', \Session::get('company'))->first()->id;
+
+				    $journal_repo = \App::make('Financials\Journal');
+
+				    $entries =  $this->makeAccountingEntries(\Input::only('account','account_amount','entry_type'));
+					
+					
+				    $journal = $journal_repo->create(array('entity' => $entity,'module' => '4','reference' => \Input::get('receipt_no'), 'total_amount' => \Input::get('amount'),
+								'post_data' => $entries));
+
+					if($journal){
+						$genledger_repo = \App::make('Financials\GenLedger');
+						
+						
+						$gl = $genledger_repo->create(array('entity' => $entity, 'module' => '4','reference' => \Input::get('receipt_no'), 'total_amount' => \Input::get('amount'),
+									'post_data' => $entries));
+						if($gl){
+						
+							$subledger_repo = \App::make('Financials\SubLedger');
+							
+							$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('receipt_no'), 'credit' => 0,
+									'debit' => \Input::get('amount'), 'balance' =>  0, 'vendor' => \Input::get('payee')));
+						}
+					}
+
+					$this->register->post(array('invoice_no' => \Input::get('receipt_no')));
+					\DB::commit();
+					$return_info['status'] = 'success';
+					$return_info['message'] = 'Posting Successful';
+				}catch(\PDOException $e){
+					\DB::rollBack();
+					$return_info['status'] = 'success_failed';
+					$return_info['message'] = 'Transaction Failed, Please contact System Administrator';
+				}
+
+
+				return \Response::json($return_info);
+			}
+
+			else return \Response::json(array('status' => 'success_failed', 'message' => $post_check['message']));
+
+		}
+
+		else if($validate_record['passed'] == 0)
+			return \Response::json(array('status' => 'success_error', 'message' => $validate_record['object']));
+		
+		else return \Response::json(array('status' => 'success_failed', 'message' => $validate_record['object']));
+		
+				
+	}
+
 	private function prePost($total, $amounts){
 		$post_total = 0;
 
@@ -183,6 +248,15 @@ class ARReceiptController extends \BaseController{
 
 		if($total == $post_total) return true;
 		else return false;
+	}
+
+	private function prePostCheck($input){
+	
+		// if(isset($input['subject_payment']))
+		// 	return array('passed' => true,'message'=> null);
+		// else return array('passed' => false,'message'=>"Please select the amount subject for payment");
+		return array('passed' => true,'message'=> null);
+
 	}
 
 	private function preparelines($accounts, $amounts){
@@ -211,12 +285,24 @@ class ARReceiptController extends \BaseController{
 
 			$invoice = $this->register->create(array('trans_type' => 'receipt_entry', 'amount'=>\Input::get('amount'), 
 				'ref_id' =>\Input::get('payee'), 'module_id' => '4', 'invoice_date' => \Input::get('receipt_date'),
-				'prefix' => 'RCPT', 'account' => \Input::get('account'), 'receipt' => \Input::get('invoice_no')));
+				'prefix' => 'RCPT', 'account' => \Input::get('account'), 'receipt' => \Input::get('invoice_no'),
+				'refno' => \Input::get('receipt_ref')));
 
 			if($invoice['saved']){
 					// $sdd = $repo->updateById(\Input::get('reference'));
+					//return \Response::json(array('status' => 'success', 'message' => 'Invoice Created'));
+				$lines_repo = \App::make('Financials\InvoiceLine');
+
+				$parsed_lines = $this->parse_lines(\Input::only('debit_account','amount','account'));
+
+				$lines = $lines_repo->create($parsed_lines,$invoice['object']->id);
+
+				if($lines){
 					\DB::commit();
 					return \Response::json(array('status' => 'success', 'message' => 'Receipt Created'));
+				}
+				else return \Response::json(array('status' => 'success_failed', 'message' => 'Unable to record receipt'));
+					
 			}
 			else
 				return \Response::json(array('status' => 'success_error', 'message' => $invoice['object']));
@@ -283,19 +369,50 @@ class ARReceiptController extends \BaseController{
 		return array_sum($lines['account_amount']);
 	}
 
+	private function makeAccountingEntries($data){
+		$accounts = array_get($data, 'account');
+		$amounts = array_get($data, 'account_amount');
+		$action = array_get($data, 'entry_type');
+		$lines = array();
+
+		$init = 0;
+
+		foreach ($accounts as $account) {
+			$line = array();
+			$line['account'] = $account;
+
+			if($action[$init] == 0){
+				$line['debit'] = $amounts[$init];
+				$line['credit'] = 0;
+			}
+				
+			else{
+				$line['debit'] = 0;
+				$line['credit'] = $amounts[$init];
+			}
+
+			array_push($lines, $line);
+			
+			$line = null;
+			$init++;
+		}
+
+		return $lines;
+	}
+
 	private function parse_lines($lines){
 		$ctr = 0;
 		$bulk = array();
 
-		foreach ($lines['account'] as $line ) {
-			$bulk_line = array('account' => $line,'line' => $ctr,'description' => $lines['account_description'][$ctr],
-				'amount' => $lines['account_amount'][$ctr]);
 
-			array_push($bulk, $bulk_line);
+		//debit to account receivables
+		array_push($bulk, array('account' => array_get($lines, 'debit_account'),'line' => '0','description' => 'Debit to Receivables',
+				'amount' => array_get($lines, 'amount'), 'type' => 'D'));
 
-			$ctr++;
+		//credit to bank
+		array_push($bulk, array('account' => array_get($lines, 'account'),'line' => '1','description' => 'Credit to Bank',
+				'amount' => array_get($lines, 'amount'), 'type' => 'C'));
 
-		}
 
 		return $bulk;
 	}

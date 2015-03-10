@@ -34,7 +34,7 @@
                   <select class="form-control" id="reload_type">
                             <option value="complete">Pending Payment</option>
                             <option value="open">Open Invoices </option>
-                            <option value="all">All Invoices </option>
+                            <!-- <option value="all">All Invoices </option> -->
                     </select>
                  <button type="button" class="btn btn-md btn-success" onclick="refreshTable();"><i class="fa fa-refresh fa-lg"></i>&nbsp;<strong>Refresh Table</strong></button>
                 </div>

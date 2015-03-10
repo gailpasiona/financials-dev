@@ -122,6 +122,7 @@
                                                             </select>
                                                           </div>
                                                           <div class="col-md-2"><span class="col-md-1 control-label"></span>
+                                                            
                                                             <input type="text" class="form-control" id="account_amount[]" name="account_amount[]" placeholder="Amount" value="{{{$items['line_amount']}}}">
                                                           </div>
                                                           <div class="col-md-4"><span class="col-md-4 control-label"></span>

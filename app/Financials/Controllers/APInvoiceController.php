@@ -270,7 +270,7 @@ class APInvoiceController extends \BaseController{
 
 						}
 					}
-					$this->register->post(\Input::get('invoice_no'));
+					$this->register->post(\Input::only('invoice_no'));
 					\DB::commit();
 					$return_info['status'] = 'success';
 					$return_info['message'] = 'Posting Successful';

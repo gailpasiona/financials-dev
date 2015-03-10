@@ -13,6 +13,10 @@
                         <div id="voucher_info" class="form-group">
                             <div class="col-md-12">
                                 <div class="form-group row">
+
+                                  @if(isset($data['type']))
+                                    <input class="form-control" type="hidden" name="debit_account" id="debit_account" value="{{{$data['record']['sales_lines'][0]['account_id']}}}">
+                                  @endif
                                   
                                   @if(isset($data['record']['register_id']))
                                     @if(isset($data['type']))
@@ -45,12 +49,27 @@
                                 <div class="form-group row">
                                     <label for="payee_name" class="col-md-4 control-label">Amount</label>
                                     <div class="col-md-6">
-                                      <input class="form-control" placeholder="Amount" type="text" readonly="readonly" name="amount" id="amount" value="{{{$data['record']['account_value']}}}">
+                                      @if(isset($data['record']['sales_lines']))
+                                        <input class="form-control" placeholder="Amount" type="text" readonly="readonly" name="amount" id="amount" value="{{{$data['record']['sales_lines'][0]['line_amount']}}}">
+                                      @else
+                                        <input class="form-control" placeholder="Amount" type="text" readonly="readonly" name="amount" id="amount" value="{{{$data['record']['account_value']}}}">
+                                      @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="payee_name" class="col-md-4 control-label">Receipt Reference</label>
+                                    <div class="col-md-6">
+                                      @if(isset($data['type']))
+                                        <input class="form-control" placeholder="Reference" type="text" name="receipt_ref" id="receipt_ref" value="">
+                                      @else
+                                        <input class="form-control" placeholder="Reference" type="text" name="receipt_ref" id="receipt_ref" value="{{{$data['record']['register_refno']}}}">
+                                      @endif
                                     </div>
                                 </div>
                                     
                                 <div class="form-group row">
-                                    <label for="cost_dept" class="col-md-4 control-label">Account</label>
+                                    <label for="cost_dept" class="col-md-4 control-label">Target Bank</label>
                                     <div class="col-md-6">
                                        <select class="form-control" name="account" id="account">
                                            @foreach($data['coa'] as $coa)

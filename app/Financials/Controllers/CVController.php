@@ -373,7 +373,7 @@ class CVController extends \BaseController{
 
 						}
 					}
-					$reg_repo->post(\Input::get('invoice_no'));
+					$reg_repo->post(\Input::only('invoice_no'));
 					\DB::commit();
 					$return_info['status'] = 'success';
 					$return_info['message'] = 'Posting Successful';

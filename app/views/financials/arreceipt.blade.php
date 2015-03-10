@@ -32,9 +32,9 @@
               <div class="control-group pull-right">
                 <div class="controls">
                   <select class="form-control" id="reload_type">
-                            <option value="complete">Pending Payment </option>
-                            <option value="open">Open Invoices </option>
-                            <option value="all">All Invoices </option>
+                            <option value="complete">Registered Payment </option>
+                            <option value="open">Open Receipts </option>
+                            <!-- <option value="all">All Invoices </option> -->
                     </select>
                  <button type="button" class="btn btn-md btn-success" onclick="refreshTable();"><i class="fa fa-refresh fa-lg"></i>&nbsp;<strong>Refresh Table</strong></button>
                 </div>
@@ -160,7 +160,7 @@ function useractionFormatter(value,row){
     }
     else{
          url = 'receipts/' + encodeURIComponent(value) + '/edit';
-        var posturl = '';//'receipts/post/' + encodeURIComponent(value);
+        var posturl = 'receipts/post/' + encodeURIComponent(value);
         // return '<a class="btn btn-sm btn-success" href="'+ url +'">Post Invoice</a>';
         return '<a class="btn btn-sm btn-warning" href="'+ url +'" data-toggle="modal" data-target="#modal_form"><strong>Edit</strong></a>&nbsp;' + 
 

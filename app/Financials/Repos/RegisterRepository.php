@@ -36,18 +36,21 @@ class RegisterRepository implements RegisterRepositoryInterface {
 
 	public function getSIRecord($ref){ //Supplier Invoice
 		$fields = array('id','register_id','register_refno','account_value', 'po_id');
-		return Register::where('register_id',$ref)->company()->aging()->with('customer')->get($fields);
+		return Register::where('register_id',$ref)->company()->aging()->with(array('customer','sales_lines' => function($query){
+			$query->where('is_tagged_line','1');
+		}))->get($fields);
 	}
 
 	public function getOpenSIRecord($ref){ //Customer Invoice
 		$fields = array('id','register_id','register_refno','account_value','invoice_date','po_id');
 		return Register::where('register_id',$ref)->company()->open()->with('customer','sales_lines')->get($fields);
+		// else return Register::where('register_id',$ref)->company()->open()->with('customer','sales_lines')->get($fields);
 		//return \DB::getQueryLog();
 	}
 
 	public function getOpenReceiptRecord($ref){ //Customer Invoice
 		$fields = array('id','account_id','register_id','register_refno','account_value','invoice_date','po_id');
-		return Register::where('register_id',$ref)->company()->module(4)->open()->with('customer')->get($fields);
+		return Register::where('register_id',$ref)->company()->module(4)->open()->with('customer','sales_lines')->get($fields);
 		//return \DB::getQueryLog();
 	}
 
@@ -173,7 +176,12 @@ class RegisterRepository implements RegisterRepositoryInterface {
 	}
 
 	public function create($data){
-		// $continue = true;
+		$continue = true;
+		// $invoice = $this->register->create(array('trans_type' => 'sales_entry', 'amount'=>\Input::get('amount_request'), 
+		// 		'ref_id' =>\Input::get('payee'), 'module_id' => '2', 'invoice_date' => \Input::get('invoice_date'),
+		// 		'register_refno' => \Input::get('register_refno'),
+		// 		'prefix' => 'SI', 'line_amounts' => \Input::get('account_amount'), 'line_accounts' => \Input::get('account'),
+		// 		'line_descriptions' => \Input::get('account_description')));
 		
 		$register = new Register;
 
@@ -181,41 +189,94 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		
 		$register->module_id = array_get($data,'module_id');
 
-		$register->account_id = 3;
+		if(isset($data['account']))
+			$register->account_id = array_get($data,'account');
+		else
+			$register->account_id = 3;
+
+		if(isset($data['receipt']))
+			$register->receipt_id = Register::company()->where('register_id',array_get($data,'receipt'))->first()->id;
 
 		$register->po_id = array_get($data,'ref_id');
 
-		$register->account_value = array_get($data,'amount');
+		// $register->account_value = array_get($data,'amount');
 
-		$register->register_refno = array_get($data, 'refno');
+		if(isset($data['amount']))
+			$register->account_value = array_get($data,'amount');
 
-		$register->invoice_date = array_get($data, 'invoice_date');
+		else{
+			if(isset($data['line_amounts'])){
+				// $sum_amt = 0;
+				$debit_sum_amt = 0;
+				$credit_sum_amt = 0;
+				$index_ctr = 0;
 
-		$register->entry_type = array_get($data, 'entry_type');
+				$types = array_get($data, 'entry_type');
 
-		$register->line_account = array_get($data, 'line_accounts');
-		
-		$register->line_amount = array_get($data, 'line_amounts');
+				foreach (array_get($data,'line_amounts') as $amt) {
+					if(preg_match('/^([1-9][0-9]*|0)(\.[0-9]{2})?$/', $amt)){ //check if amounts are valid
+						// $sum_amt += $amt;
+						if($types[$index_ctr] == '0')
+							$debit_sum_amt += $amt;
+						else
+							$credit_sum_amt += $amt;
 
-		$register->line_description = array_get($data, 'line_descriptions');
+						$index_ctr ++;
+					}
 
-		$filter = Register::validate($register->toArray(), array_get($data, 'trans_type'));
+					else{
+						$continue = false;
+						break;
+					}
+						
+				}
 
-		if($filter->passes()) {
-				
-			if(isset($register->entry_type)) unset($register->entry_type);
-			if(isset($register->line_amount)) unset($register->line_amount);
-			if(isset($register->line_account)) unset($register->line_account);
-			if(isset($register->line_description)) unset($register->line_description);
-	        	
-			if($this->save($register))
-				return array('saved' => true, 'object' => $register);
+				if($credit_sum_amt != $debit_sum_amt) $continue = false;
 
-			else return array('saved' => false, 'object' => 'Unable to create check register');
+				else $register->account_value = $credit_sum_amt; //array_sum($data['line_amounts']);
+			}		
+			
+		}
 
-	    }
+		if($continue){
 
-	    else return array('saved' => false , 'object' => $filter->messages());
+			if(isset($data['refno']))
+				$register->register_refno = array_get($data, 'refno');
+			
+			$register->invoice_date = array_get($data, 'invoice_date');
+
+			if(isset($data['entry_type']))
+				$register->entry_type = array_get($data, 'entry_type');
+
+			if(isset($data['line_accounts']))
+				$register->line_account = array_get($data, 'line_accounts');
+			
+			if(isset($data['line_amounts']))
+				$register->line_amount = array_get($data, 'line_amounts');
+
+			if(isset($data['line_descriptions']))
+				$register->line_description = array_get($data, 'line_descriptions');
+
+			$filter = Register::validate($register->toArray(), array_get($data, 'trans_type'));
+
+			if($filter->passes()) {
+					
+				if(isset($register->entry_type)) unset($register->entry_type);
+				if(isset($register->line_amount)) unset($register->line_amount);
+				if(isset($register->line_account)) unset($register->line_account);
+				if(isset($register->line_description)) unset($register->line_description);
+		        	
+				if($this->save($register))
+					return array('saved' => true, 'object' => $register);
+
+				else return array('saved' => false, 'object' => 'Unable to create check register');
+
+		    }
+
+		    else return array('saved' => false , 'object' => $filter->messages());
+		}
+		else
+			return array('saved' => false, 'object' => array('amount' => "Please check line amounts"));		
 
 	}
 
@@ -257,38 +318,53 @@ class RegisterRepository implements RegisterRepositoryInterface {
 	public function modify_SI($ref,$data){
 		$register = Register::where('register_id', $ref)->first();
 		$continue = true;
+
 		if($register->register_post == 'N'){
 
 			$register->po_id = array_get($data,'ref_id');
 
-			$sum_amt = 0;
+			$debit_sum_amt = 0;
+			$credit_sum_amt = 0;
+			$index_ctr = 0;
+
+			$types = array_get($data, 'entry_type');
 
 			foreach (array_get($data,'line_amounts') as $amt) {
-				if(preg_match('/^([1-9][0-9]*|0)(\.[0-9]{2})?$/', $amt)) //check if amounts are valid
-					$sum_amt += $amt;
+				if(preg_match('/^([1-9][0-9]*|0)(\.[0-9]{2})?$/', $amt)){
+					if($types[$index_ctr] == '0')
+						$debit_sum_amt += $amt;
+					else
+						$credit_sum_amt += $amt;
+
+					$index_ctr ++;
+				}	 //check if amounts are valid
+					// $sum_amt += $amt;
 				else{
 					$continue = false;
 					break;
 				}
 			}
 
+			if($credit_sum_amt != $debit_sum_amt) $continue = false;
+
 			if($continue){
-				$register->account_value = array_sum($data['line_amounts']);
+				$register->account_value = $credit_sum_amt;//array_sum($data['line_amounts']);
 			
 				$register->register_refno = array_get($data, 'refno');
 				$register->invoice_date = array_get($data, 'invoice_date');
 
-				$register->account = array_get($data, 'line_accounts');
-				$register->account_amount = array_get($data, 'line_amounts');
-				$register->account_description = array_get($data, 'line_descriptions');
+				$register->entry_type = array_get($data, 'entry_type');
+				$register->line_account = array_get($data, 'line_accounts');
+				$register->line_amount = array_get($data, 'line_amounts');
+				$register->line_description = array_get($data, 'line_descriptions');
 
 				$filter = Register::validate($register->toArray(),'sales_entry');
 
 				if($filter->passes()) {
-		        	
-					unset($register->account);
-					unset($register->account_amount);
-					unset($register->account_description);
+		        	unset($register->entry_type);
+					unset($register->line_account);
+					unset($register->line_amount);
+					unset($register->line_description);
 
 					$this->update($register);
 
@@ -297,7 +373,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		        }
 		        else return array('saved' => 0 , 'object' => $filter->messages());
 			}
-			else return array('saved' => false, 'object' => array('amount' => "Please check line amounts"));
+			else return array('saved' => false, 'object' => array('amount' => "Please check line amounts. (1) Amount should be a valid amount, (2)Debit and Credit Total must be equal"));
 			
 		}
 		else return array('saved' => -1, 'object' => array('message' => 'Failed to apply changes'));
@@ -309,6 +385,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 		if($register->register_post == 'N'){
 			$register->invoice_date = array_get($data, 'invoice_date');
 			$register->account_id = array_get($data, 'account');
+			$register->register_refno = array_get($data, 'reference');
 
 			$filter = Register::validate($register->toArray(),'receipt_entry');
 
@@ -325,11 +402,14 @@ class RegisterRepository implements RegisterRepositoryInterface {
 	}
 
 	public function post($ref){
-		$register = Register::where('register_id', $ref)->first();
+		$register = Register::where('register_id', array_get($ref,'invoice_no'))->first();
 
 		// if($register->register_post == 'N'){
 			$register->register_post = 'Y';
 			$register->register_date_posted = date("Y-m-d H:i:s");
+
+			// if(isset($ref['subject_payment']))
+			// 	$register->account_value = array_get($ref,'subject_payment');
 
 			// $filter = Register::validate($register->toArray(),'post');
 
@@ -361,7 +441,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 	}
 
 	public function pre_posting_ar($ref){
-		$register = Register::where('register_id', array_get($ref, 'invoice_no'))->first();
+		$register = Register::where('register_id', $ref)->first();
 
 		if($register->register_post == 'N'){
 			 return array('passed' => 1, 'object' => $register);
@@ -370,7 +450,7 @@ class RegisterRepository implements RegisterRepositoryInterface {
 	}
 
 	public function pre_posting_receipt($ref){
-		$register = Register::where('register_id', array_get($ref, 'receipt_no'))->first();
+		$register = Register::where('register_id', $ref)->first();
 
 		if($register->register_post == 'N'){
 			 return array('passed' => 1, 'object' => $register);
