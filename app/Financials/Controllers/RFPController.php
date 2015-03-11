@@ -21,10 +21,10 @@ class RFPController extends \BaseController{
 	}
 
 	private function extractAP($data){
-		$header_account = \App::make('Financials\Coa')->findByName('Accounts Payable')->account_id;
+		// $header_account = \App::make('Financials\Coa')->findByName('Accounts Payable')->account_id;
 		$return_value = null;
 		foreach ($data as $line) {
-			if($line['account_id'] == $header_account){
+			if($line['is_tagged_line'] == '1'){
 				// $return_value = array('account_id' => $line['account_id'], 'amount' => $line['line_amount'],
 				// 	['description'] => 'N/A');
 				$return_value = $line['line_amount'];

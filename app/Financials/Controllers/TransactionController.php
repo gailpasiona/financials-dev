@@ -59,7 +59,7 @@ class TransactionController extends \BaseController{
 				
 					\DB::commit();
 					$return_info['status'] = 'success';
-					$return_info['message'] = 'Payable created, waiting for approval!';
+					$return_info['message'] = 'Payable created!';
 
 			}
 

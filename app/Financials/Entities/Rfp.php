@@ -7,7 +7,7 @@ class Rfp extends FinancialModel {
         'entry' => [
                      'costing_department'  => 'required',
                      'date_needed' => 'required|date',
-                     'amount_requested'  =>  'amount',
+                     'amount_requested'  =>  'required|amount',
                      'request_description' => 'required'
         ],
         'approval' => [

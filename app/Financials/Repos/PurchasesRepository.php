@@ -74,9 +74,10 @@ class PurchasesRepository implements PurchasesRepositoryInterface {
 	}
 
 	public function create($data){
+		$record_count = $this->entries_count() + 1;
 		$record = new Purchases;
-		$record->id = $this->entries_count() + 1;
-		$record->po_number = array_get($data, 'po_number');
+		$record->id = $record_count;
+		$record->po_number = 'MP-' . $record_count;
         $record->po_total_amount = array_get($data, 'amount');
         $record->po_date = array_get($data, 'po_date');
         $record->requestor = array_get($data, 'requestor');

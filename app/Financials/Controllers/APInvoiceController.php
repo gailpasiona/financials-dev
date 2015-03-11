@@ -239,7 +239,7 @@ class APInvoiceController extends \BaseController{
 
 		if($validate_record['passed'] > 0){
 
-			$post_check = $this->prePostCheck(\Input::only('account','amount_request','account_amount','entry_type'));
+			$post_check = $this->prePostCheck(\Input::only('account','amount_request','account_amount','entry_type','subject_payment'));
 
 			if($post_check['passed']){
 
@@ -263,10 +263,13 @@ class APInvoiceController extends \BaseController{
 									'post_data' => $entries));
 
 						if($gl){
+							$lines_repo = \App::make('Financials\InvoiceLine');
+
+							$tagged_line_amount = $lines_repo->tagLine(\Input::get('subject_payment'),$this->register->findByRegId(\Input::get('invoice_no'))->id);
 							$subledger_repo = \App::make('Financials\SubLedger');
-							$sub_amt = $this->extractAP(\Input::only('account','account_amount'));
-							$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => $sub_amt,
-									'debit' => 0, 'balance' =>  $sub_amt, 'vendor' => $this->register->findByRegId(\Input::get('invoice_no'))->reference->supplier->supplier_name));
+							// $sub_amt = $this->extractAP(\Input::only('account','account_amount'));
+							$subl = $subledger_repo->create(array('entity' => $entity, 'reference' => \Input::get('invoice_no'), 'credit' => $tagged_line_amount,
+									'debit' => 0, 'balance' =>  $tagged_line_amount, 'vendor' => $this->register->findByRegId(\Input::get('invoice_no'))->reference->supplier->supplier_name));
 
 						}
 					}
@@ -402,7 +405,7 @@ class APInvoiceController extends \BaseController{
 		$post_action = array_get($input,'entry_type');
 		$accounts = array_get($input, 'account');
 
-		if(count(array_unique($accounts)) == count($accounts)){
+		//if(count(array_unique($accounts)) == count($accounts)){
 			if(!in_array('0',$post_action))
 			return array('passed' => false,'message'=>"Debit account is required");
 			else if(!in_array('1', $post_action))
@@ -422,16 +425,21 @@ class APInvoiceController extends \BaseController{
 				}
 
 				if(array_sum($total_credit) == array_sum($total_debit)){
-					if(array_sum($total_credit) == $total)
-						return array('passed' => true,'message'=>"passed");
+					if(array_sum($total_credit) == $total){
+						if(isset($input['subject_payment']))
+							return array('passed' => true,'message'=> "passed");
+						else return array('passed' => false,'message'=>"Please select the amount subject for payment");
+						// return array('passed' => true,'message'=>"passed");
+					}
+						
 					else
 						return array('passed' => false,'message'=>"Invoice amount did not match the total of accounts' amount");
 				}
 				else return array('passed' => false,'message'=>"total credit and debit amount must be equal");
 					
 			} 
-		}
-		else return array('passed' => false,'message'=>"duplicate coa account detected");
+		// }
+		// else return array('passed' => false,'message'=>"duplicate coa account detected");
 
 		
 	}
